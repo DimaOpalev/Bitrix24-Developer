@@ -71,9 +71,10 @@ storage.php
 /tasks
 /telephony
 /terminal
-timeman
+/timeman
 urlrewrite.php
 ustat.php
 /vibe
 /vote-result
 /workgroups
+phpinfo.php
