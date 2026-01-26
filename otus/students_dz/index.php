@@ -3,8 +3,11 @@
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php"); ?>
 <?php
 $APPLICATION->SetTitle("Список Домашних работ");
-
 Asset::getInstance()->addCss('//cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+
+echo($APPLICATION->ShowPanel(true)); // true - принудительный показ
+
+//((!$isBitrix24Cloud || $USER->isAdmin()) && !defined('SKIP_SHOW_PANEL'));
 
 ?>
     <style>
