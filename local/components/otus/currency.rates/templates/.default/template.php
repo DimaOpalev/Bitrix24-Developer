@@ -27,7 +27,7 @@ function isBootstrapLoaded($APPLICATION)
             return true;
         }
     }
-    
+
     // Проверяем JS
     $arHeadScripts = $APPLICATION->GetHeadScripts();
     foreach ($arHeadScripts as $script) {
@@ -35,7 +35,7 @@ function isBootstrapLoaded($APPLICATION)
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -46,7 +46,7 @@ function isBootstrapLoaded($APPLICATION)
 //         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 //         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 //     ');
-    
+
 //     // Добавляем мета-тег для адаптивности
 //     $APPLICATION->AddHeadString('<meta name="viewport" content="width=device-width, initial-scale=1">');
 // }
@@ -58,62 +58,66 @@ $currentUrl = $APPLICATION->GetCurPageParam('', ['currency']);
 
 <div class="currency-rates">
     <h1>Курсы валют</h1>
-    <div class="currency-selector row">
-        <form method="post" action="<?= $currentUrl ?>">
-            <div class="col-md-4">
-                <div>
-                    <label for="currency_select">
-                        Выберите валюту:
-                    </label>
-                </div>
-                <select name="selected_currency" id="currency_select" class="form-select">
+
+    <form class="mt-2" method="GET" action="<?= $currentUrl ?>">
+        <label for="currency_select">
+            Выберите валюту:
+        </label>
+        <div class="row">
+            <div class="col-auto">
+                <select name="currency" id="currency_select" class="form-select">
+                    <option disabled selected value="">
+                        Выберите валюту
+                    </option>
                     <?php foreach ($arResult['CURRENCIES_LIST'] as $code => $name): ?>
-                        <option value="<?= htmlspecialcharsbx($code) ?>" 
-                            <?= ($code == $arResult['CURRENT_CURRENCY']['CODE']) ? 'selected' : '' ?>>
+                        <option value="<?= htmlspecialcharsbx($code) ?>"
+                            <?= ($code == $arResult['CURRENT_CURRENCY']) ? 'selected' : '' ?>>
                             <?= htmlspecialcharsbx($name) ?> (<?= htmlspecialcharsbx($code) ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">
-                Показать информацию
-            </button>
-        </form>
-    </div>
-</div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">
+                    Показать информацию
+                </button>
+            </div>
+        </div>
+    </form>
     <?php if (!empty($arResult['CURRENT_CURRENCY'])): ?>
-        <div class="currency-info">
+        <div class="currency-info mt-4">
             <h2>
-                Информация о валюте: 
+                Информация о валюте
             </h2>
-            
-            <table>
-                <tr>
-                    <td>
-                        Код валюты:
-                    </td>
-                    <td>
-                        <strong><?= htmlspecialcharsbx($arResult['CURRENT_CURRENCY']['CODE']) ?></strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Полное название:
-                    </td>
-                    <td>
-                        <?= htmlspecialcharsbx($arResult['CURRENT_CURRENCY']["INFO"]['FULL_NAME']) ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Курс валюты:
-                    </td>
-                    <td>
-                        <?= htmlspecialcharsbx($arResult['CURRENT_CURRENCY']["INFO"]['AMOUNT']) ?>
-                    </td>
-                </tr>
-
-            </table>
+            <?php $APPLICATION->IncludeComponent(
+                "bitrix:main.ui.grid",
+                "",
+                Array(
+                    "ACTION_PANEL" => [],
+                    "AJAX_MODE" => "N",
+                    "AJAX_OPTION_HISTORY" => "N",
+                    "AJAX_OPTION_JUMP" => "N",
+                    "AJAX_OPTION_STYLE" => "N",
+                    "ALLOW_COLUMNS_RESIZE" => false,
+                    "ALLOW_COLUMNS_SORT" => false,
+                    "ALLOW_PIN_HEADER" => false,
+                    "ALLOW_SORT" => false,
+                    "COLUMNS" => $arResult['GRID_COLUMNS'],
+                    "DEFAULT_PAGE_SIZE" => 10,
+                    "ENABLE_NEXT_PAGE" => false,
+                    "GRID_ID" => "currency_grid_".$arResult['CURRENT_CURRENCY'],
+                    "NAV_OBJECT" => null,
+                    "PAGE_SIZES" => [],
+                    "ROWS" => [$arResult['GRID_DATA']],
+                    "SHOW_ACTION_PANEL" => false,
+                    "SHOW_CHECK_ALL_CHECKBOXES" => false,
+                    "SHOW_PAGESIZE" => false,
+                    "SHOW_ROW_CHECKBOXES" => false,
+                    "SHOW_SELECTED_COUNTER" => false,
+                    "SHOW_TOTAL_COUNTER" => false,
+                    "TOTAL_ROWS_COUNT" => 1
+                )
+            );?>
         </div>
     <?php else: ?>
         <div class="currency-error" style="color: red; padding: 20px; border: 1px solid red;">

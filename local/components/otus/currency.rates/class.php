@@ -2,9 +2,10 @@
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Loader;
-use Bitrix\Currency\CurrencyManager;
 use Bitrix\Currency\CurrencyTable;
 use Bitrix\Main\Context;
+use Bitrix\Main\Page\Asset;
+
 
 class CurrencyRatesComponent extends CBitrixComponent
 {
@@ -16,169 +17,43 @@ class CurrencyRatesComponent extends CBitrixComponent
         // Приводим параметры к нужному типу
         $arParams['LIST_CURRENCY'] = trim($arParams['LIST_CURRENCY'] ?? '');
         $arParams['CACHE_TIME'] = (int) ($arParams['CACHE_TIME'] ?? 3600);
-        
-        // Если валюта не выбрана, используем базовую
-        if (empty($arParams['LIST_CURRENCY'])) {
-            if (Loader::includeModule('currency')) {
-                $arParams['LIST_CURRENCY'] = CurrencyManager::getBaseCurrency();
-            } else {
-                $arParams['LIST_CURRENCY'] = 'RUB';
-            }
-        }
-        
         return $arParams;
     }
 
     /**
-     * Получение информации о полях таблицы Currency
-     */
-    function getColumn()
-    {
-        $fieldMap = CurrencyTable::getMap(); 
-        $columns = [];
-        foreach ($fieldMap as $key => $field) {
-            $columns[] = array(
-                'id' => $field->getName(),
-                'name' => $field->getTitle()
-            );
-        }
-        return $columns;
-    }
-
-    /**
-     * Получение информации о валюте
-     */
-    private function getCurrencyInfo($currencyCode)
-    {
-        $result = [
-            'CODE' => $currencyCode,
-            'INFO' => null,
-            'RATES' => [],
-            'ERROR' => false,
-            'ERROR_MESSAGE' => ''
-        ];
-        
-        if (!Loader::includeModule('currency')) {
-            $result['ERROR'] = true;
-            $result['ERROR_MESSAGE'] = 'Модуль "Валюты" не установлен';
-            return $result;
-        }
-        
-        try {
-            // Получаем основную информацию о валюте
-            $currency = CurrencyTable::getList([
-                'select' => [
-                    'CURRENCY',
-                    'AMOUNT',
-                    'AMOUNT_CNT',
-                    'SORT',
-                    'DATE_UPDATE',
-                    'NUMCODE',
-                    'BASE',
-                    'FULL_NAME' => 'CURRENT_LANG_FORMAT.FULL_NAME',
-                    'FORMAT_STRING' => 'CURRENT_LANG_FORMAT.FORMAT_STRING',
-                    'DEC_POINT' => 'CURRENT_LANG_FORMAT.DEC_POINT',
-                    'THOUSANDS_SEP' => 'CURRENT_LANG_FORMAT.THOUSANDS_SEP',
-                    'DECIMALS' => 'CURRENT_LANG_FORMAT.DECIMALS',
-                ],
-                'filter' => ['=CURRENCY' => $currencyCode],
-            ])->fetch();
-            
-            if ($currency) {
-                $result['data'] = $currency;
-                
-                // Получаем курсы других валют к выбранной
-                $baseCurrency = CurrencyManager::getBaseCurrency();
-                
-                if ($currencyCode !== $baseCurrency) {
-                    // Курс выбранной валюты к базовой
-                    $result['RATES']['TO_BASE'] = $this->getCurrencyRate($currencyCode, $baseCurrency);
-                }
-                
-            } else {
-                $result['ERROR'] = true;
-                $result['ERROR_MESSAGE'] = 'Валюта не найдена';
-            }
-        } catch (\Exception $e) {
-            $result['ERROR'] = true;
-            $result['ERROR_MESSAGE'] = $e->getMessage();
-        }
-        
-        return $result;
-    }
-    
-    
-    /**
-     * Получение курса валюты
-     */
-    private function getCurrencyRate($fromCurrency, $toCurrency)
-    {
-        if ($fromCurrency === $toCurrency) {
-            return 1;
-        }
-        
-        // Получаем курс через стандартный механизм Битрикс
-        $fromRate = \CCurrency::GetByID($fromCurrency);
-        $toRate = \CCurrency::GetByID($toCurrency);
-        
-        if ($fromRate && $toRate) {
-            // Рассчитываем курс: 1 единица fromCurrency = X единиц toCurrency
-            if ((float)$toRate['AMOUNT'] > 0) {
-                return ((float)$fromRate['AMOUNT'] / (float)$toRate['AMOUNT']);
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
      * Получение списка всех доступных валют
      */
-    private function getCurrencyList()
+    private function getCurrenciesList(): array
     {
-        $currencies = [];
-        
-        if (Loader::includeModule('currency')) {
-            $currencyList = CurrencyTable::getList([
-                'select' => ['CURRENCY', 'FULL_NAME' => 'LANG.FULL_NAME'],
-                'filter' => ['AMOUNT_CNT' => 1],
-                'order' => ['SORT' => 'ASC'],
-            ]);
-            
-            while ($currency = $currencyList->fetch()) {
-                $currencies[] = [
-                    'CODE' => $currency['CURRENCY'],
-                    'NAME' => $currency['FULL_NAME'] ?: $currency['CURRENCY'],
-                    'SELECTED' => $currency['CURRENCY'] === $this->arParams['LIST_CURRENCY']
-                ];
-            }
-        }
-        
-        return $currencies;
-    }
+        $list = [];
 
-    private function getAvailableCurrencies()
-    {
-        $currenciesList = [];
-        
         try {
+            Loader::includeModule('currency');
+
             $currencies = CurrencyTable::getList([
                 'select' => ['CURRENCY', 'FULL_NAME' => 'CURRENT_LANG_FORMAT.FULL_NAME'],
-                'filter' => ['=AMOUNT_CNT' => 1],
-                'order' => ['SORT' => 'ASC', 'CURRENCY' => 'ASC'],
+                'order' => ['CURRENCY' => 'ASC']
             ]);
-            
+
             while ($currency = $currencies->fetch()) {
-                $currenciesList[$currency['CURRENCY']] = $currency['FULL_NAME'] ?: $currency['CURRENCY'];
+                $code = $currency['CURRENCY'];
+                $name = $currency['FULL_NAME'] ?: $code;
+                $list[$code] = $name;
             }
         } catch (Exception $e) {
-            $currenciesList = ['RUB' => 'Российский рубль'];
+            // Заглушка на случай ошибки
+            $list = [
+                'RUB' => 'Российский рубль',
+            ];
         }
-        
-        return $currenciesList;
+
+        return $list;
     }
 
-    private function loadResources()
+    /*
+     * проверка загруженного bootstrap
+     * */
+    private function loadResources(): void
     {
         global $APPLICATION;
         
@@ -198,37 +73,98 @@ class CurrencyRatesComponent extends CBitrixComponent
         
         // Если Bootstrap не загружен, загружаем из шаблона
         if (!$isBootstrapLoaded) {
-            
+            $componentPath = $this->GetPath();
+
             // Путь к Bootstrap в шаблоне (предполагаем стандартную структуру)
-            $bootstrapCssPath = '/local/templates/.default/css/bootstrap.min.css';
-            $bootstrapJsPath = '/local/templates/.default/js/bootstrap.bundle.min.js';
-            
+            $bootstrapCssPath = $componentPath.'/templates/css/bootstrap.min.css';
+            $bootstrapJsPath = $componentPath.'/templates/js/bootstrap.bundle.min.js';
+
             // Проверяем существование файлов
             if (file_exists($_SERVER['DOCUMENT_ROOT'] . $bootstrapCssPath)) {
-                $APPLICATION->SetAdditionalCSS($bootstrapCssPath);
-                $APPLICATION->AddHeadScript($bootstrapJsPath);
+                Asset::getInstance()->addCss($bootstrapCssPath);
+                Asset::getInstance()->addJs($bootstrapJsPath);
             } else {
                 // Или используем CDN как запасной вариант
-                $APPLICATION->SetAdditionalCSS('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
-                $APPLICATION->AddHeadScript('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js');
+                Asset::getInstance()->addCss('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+                Asset::getInstance()->addJs('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js');
             }
         }
     }
-    
-    public function executeComponent()
+
+    /*
+     * Получение информации по выбранной валюте
+     * */
+    private function getCurrencyDataForGrid($currencyCode): ?array
+    {
+        try {
+            Loader::includeModule('currency');
+
+            $currency = CurrencyTable::getList([
+                'select' => [
+                    'CURRENCY',
+                    'AMOUNT',
+                    'AMOUNT_CNT',
+                    'SORT',
+                    'NUMCODE',
+                    'BASE',
+                    'DATE_UPDATE',
+                    'MODIFIED_BY',
+                    'DATE_CREATE',
+                    'CREATED_BY',
+                    'FULL_NAME' => 'CURRENT_LANG_FORMAT.FULL_NAME',
+                    'FORMAT_STRING' => 'CURRENT_LANG_FORMAT.FORMAT_STRING',
+                    'DEC_POINT' => 'CURRENT_LANG_FORMAT.DEC_POINT',
+                    'THOUSANDS_SEP' => 'CURRENT_LANG_FORMAT.THOUSANDS_SEP',
+                    'DECIMALS' => 'CURRENT_LANG_FORMAT.DECIMALS',
+                ],
+                'filter' => ['=CURRENCY' => $currencyCode],
+            ])->fetch();
+
+            if ($currency) {
+                // Преобразуем значения для отображения
+                $currency['AMOUNT'] = number_format($currency['AMOUNT'], 4);
+                $currency['BASE'] = $currency['BASE'] === 'Y' ? 'Да' : 'Нет';
+
+                // Формируем строку для таблицы
+                return [
+                    'id' => $currency['CURRENCY'],
+                    'columns' => $currency,
+                    'actions' => [],
+                    'editable' => false
+                ];
+            }
+
+        } catch (Exception $e) {
+            // Обработка ошибки
+        }
+
+        return null;
+    }
+
+    /*
+     * Получение списка колонок
+     * */
+    private function getGridColumns(): array
+    {
+        $fieldMap = CurrencyTable::getMap();
+        $columns = [];
+        foreach ($fieldMap as $key => $field) {
+            $columns[] = array(
+                'id' => $field->getName(),
+                'name' => $field->getTitle()
+            );
+        }
+        return $columns;
+    }
+
+    /*
+     * Формирование компонента
+     * */
+    public function executeComponent(): void
     {
         $this->loadResources();
 
         $request = Context::getCurrent()->getRequest();
-        
-        // Обрабатываем POST запрос
-        $selectedCurrency = $request->getPost('selected_currency');
-        if ($selectedCurrency && $this->arParams['LIST_CURRENCY'] != $selectedCurrency) {
-            // Обновляем параметр через GET параметр для обновления компонента
-            LocalRedirect($this->request->getRequestUri() . '?' . http_build_query([
-                'currency' => $selectedCurrency
-            ]));
-        }
         
         // Получаем выбранную валюту из GET параметров
         $getCurrency = $request->get('currency');
@@ -237,16 +173,11 @@ class CurrencyRatesComponent extends CBitrixComponent
         }
         
         // Получаем список доступных валют
-        $this->arResult['CURRENCIES_LIST'] = $this->getAvailableCurrencies();
-        
-        // Получаем информацию о выбранной валюте
-        $currentCurrency = $this->arParams['LIST_CURRENCY'];
-        $this->arResult['CURRENT_CURRENCY'] = $this->getCurrencyInfo($currentCurrency);
+        $this->arResult['CURRENCIES_LIST'] = $this->getCurrenciesList();
+        $this->arResult['GRID_DATA'] = $this->getCurrencyDataForGrid($getCurrency);
+        $this->arResult['GRID_COLUMNS'] = $this->getGridColumns();
+        $this->arResult['CURRENT_CURRENCY'] = $this->arParams['LIST_CURRENCY'];
 
-        // получаем названия полей таблицы
-        $this->arResult['COLUMNS'] = $this->getColumn();
-
-        
         // Подключаем шаблон
         $this->includeComponentTemplate();
     }
