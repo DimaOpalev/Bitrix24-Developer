@@ -10,8 +10,16 @@ if(file_exists(__DIR__ . '/../../vendor/autoload.php')) {
 //require_once $_SERVER['DOCUMENT_ROOT'] . '/local/lib/otuslogger.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/local/App/Debug/Log.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/local/php_interface/src/Otus/Diag/FileExceptionHanlderLogCustom.php';
+// require_once  $_SERVER['DOCUMENT_ROOT'] . '/local/php_interface/extensions.php';
 
 $eventManager = EventManager::getInstance();
+
+/*
+$eventManager->AddEventHandler('main', 'OnEpilog', function() {
+    //Bitrix\Main\Page\Asset::getInstance()->addJs('/otus/students_dz/homework8/src/js/homework8.js');
+    Bitrix\Main\Page\Asset::getInstance()->addJs('/otus/students_dz/homework8/src/js/timeman.js');
+});
+*/
 
 // Используем OnPageStart — здесь уже доступны данные пользователя
 $eventManager->addEventHandler("main", "OnBeforeProlog", function() {
@@ -48,6 +56,19 @@ $eventManager->addEventHandler("main", "OnBeforeProlog", function() {
 
         $asset->addJs("/local/js/otpusk-otgul.js");
     }
+});
+
+AddEventHandler('main', 'OnEpilog', function() {
+    global $APPLICATION;
+    
+    // Подключаем компонент на всех страницах
+    $APPLICATION->IncludeComponent(
+        'otus:timeman.integration',
+        '',
+        [],
+        null,
+        ['HIDE_ICONS' => 'Y']
+    );
 });
 
 ?>

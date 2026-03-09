@@ -1,0 +1,21 @@
+.content-popup-window {
+    padding: 20px;
+}
+
+.content-popup-window-header {
+    margin-bottom: 15px; color: #333;
+}
+
+.content-popup-window-body {
+    margin: 15px 0; 
+    line-height: 1.6;
+}
+
+.popup-window-button-accept {
+    background: #2fc7f7 !important;
+    border-color: #2fc7f7 !important;
+}
+.popup-window-button-link {
+    border: none !important;
+    background: none !important;
+}
