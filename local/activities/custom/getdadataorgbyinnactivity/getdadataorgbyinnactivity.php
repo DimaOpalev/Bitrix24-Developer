@@ -11,7 +11,6 @@ use Bitrix\Main\Loader;
 use Bitrix\Crm\EntityRequisite;
 use CCrmOwnerType;
 
-// class CBPHelloWorldActivity extends BaseActivity
 class CBPGetDadataOrgByInnActivity extends BaseActivity
 {
     /**
@@ -68,7 +67,6 @@ class CBPGetDadataOrgByInnActivity extends BaseActivity
 
     /**
      * Описывает параметры для диалога настроек
-     * ✅ ПРАВИЛЬНАЯ СИГНАТУРА С PropertiesDialog
      */
     public static function getPropertiesDialogMap(?PropertiesDialog $dialog = null): array
     {
@@ -104,6 +102,14 @@ class CBPGetDadataOrgByInnActivity extends BaseActivity
     {
         $errors = parent::internalExecute();
         try {
+            $rootActivity = $this->GetRootActivity(); // Получаем объект бизнес-процесса
+            $documentId = $rootActivity->GetDocumentId();
+            $documentService = $this->workflow->GetService("DocumentService"); // Доступ к сервису управления документами
+            $arDocumentFields = $documentService->GetDocument($documentId); // Массив со значениями всех полей документа
+
+
+            $this->log("documentType = ".print_r($documentId, true).", arDocumentFields = ".print_r($arDocumentFields, true));
+
             // Получаем значения параметров
 
             $inn = $this->Inn;
@@ -156,6 +162,11 @@ class CBPGetDadataOrgByInnActivity extends BaseActivity
                 $this->preparedProperties['Director'] = $data['management']['name'] ?? '';
                 $this->preparedProperties['Okved'] = $data['okved'] ?? '';
                 $this->preparedProperties['Status'] = 'success';
+
+                $documentService->UpdateDocument($documentId, [
+                    'PROPERTY_UF_CUSTOMER' => "CO_{$companyId}",
+                ]);
+                
             } else {
                 throw new \Exception(Loc::getMessage('GETDADATA_ACTIVITY_ERROR_NOT_FOUND', ['#INN#' => $inn]));
             }
