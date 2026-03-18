@@ -2,6 +2,7 @@
 use Bitrix\Main\Page\Asset as Asset;
 use Bitrix\Main\Engine\CurrentUser;
 use Bitrix\Main\EventManager;
+use \Bitrix\Main\Loader;
 
 if(file_exists(__DIR__ . '/../../vendor/autoload.php')) {
     require_once(__DIR__ . '/../../vendor/autoload.php');
@@ -12,7 +13,36 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/local/App/Debug/Log.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/local/php_interface/src/Otus/Diag/FileExceptionHanlderLogCustom.php';
 // require_once  $_SERVER['DOCUMENT_ROOT'] . '/local/php_interface/extensions.php';
 
+// Bitrix\Main\Loader::registerAutoLoadClasses(null, [
+//     'Otus\\Events\\IblockEventHandler' => '/local/php_interface/src/Events/IblockEventHandler.php',
+// ]);
+
 $eventManager = EventManager::getInstance();
+
+$eventManager->addEventHandler(
+    "iblock", 
+    "OnBeforeIBlockElementAdd", 
+    [
+        'Otus\Events\IblockEventHandler', 'onElementBeforeAdd'
+    ]
+);
+
+$eventManager->addEventHandler(
+    "iblock", 
+    "OnAfterIBlockElementUpdate", 
+    [
+        'Otus\Events\IblockEventHandler', 'onElementAfterUpdate'
+    ]
+);
+
+$eventManager->addEventHandler(
+    "iblock", 
+    "OnBeforeIBlockElementDelete", 
+    [
+        'Otus\Events\IblockEventHandler', 'onElementBeforeDelete'
+    ]
+);
+
 
 /*
 $eventManager->AddEventHandler('main', 'OnEpilog', function() {
