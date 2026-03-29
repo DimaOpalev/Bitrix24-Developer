@@ -3,7 +3,7 @@ namespace Otus\Events;
 
 use Bitrix\Main\Loader;
 use Bitrix\Crm\Service\Container;
-use Bitrix\Crm\Settings\DealSettings;
+use Bitrix\Crm\Service\Operation\Update;
 
 class IblockEventHandler
 {
@@ -209,42 +209,70 @@ class IblockEventHandler
     }
 
     /**
-     * Обновление существующей сделки без генерации событий
+     * Обновление существующей сделки (новое API)
      */
     private static function updateDeal($dealId, $title, $sum, $companyId, $comment, $responsibleId)
     {
-        $dealFields = [
-            'TITLE' => $title,
-            'OPPORTUNITY' => $sum,
-            'ASSIGNED_BY_ID' => $responsibleId,
-            'COMMENTS' => $comment,
-        ];
-        
-        if ($companyId > 0) {
-            $dealFields['COMPANY_ID'] = $companyId;
-        }
-        
-        //отключаем системные события
-        $options = [
-            'ENABLE_SYSTEM_EVENTS' => false,  // События OnBefore/OnAfterCrmDealUpdate НЕ сработают
-            'REGISTER_SONET_EVENT' => false,   // Дополнительно отключаем события SO/NO
-            'DISABLE_USER_FIELD_CHECK' => true, // Отключаем проверку пользовательских полей
-        ];
-        
-        $deal = new \CCrmDeal(false);  // false — отключаем проверку прав
-        $result = $deal->Update($dealId, $dealFields, true, true, $options);
-        
-        if (!$result) {
-            $error = $deal->LAST_ERROR ?: 'Неизвестная ошибка';
-            throw new \Exception("Ошибка при обновлении сделки: {$error}");
-        }
-        
-        self::log('updateDeal - Сделка обновлена (события отключены)', [
+        self::log('updateDeal - Начинаем обновление сделки (новое API)', [
             'DEAL_ID' => $dealId,
-            'fields' => $dealFields,
+            'title' => $title,
+            'sum' => $sum,
+            'companyId' => $companyId,
+            'responsibleId' => $responsibleId,
         ]);
-        
-        return $result;
+
+        try {
+            // 1. Получаем фабрику для сделок
+            $factory = Container::getInstance()->getFactory(\CCrmOwnerType::Deal);
+            
+            if (!$factory) {
+                throw new \Exception('Не удалось получить фабрику для сделок');
+            }
+            
+            // 2. Получаем объект сделки
+            $dealItem = $factory->getItem($dealId);
+            
+            if (!$dealItem) {
+                throw new \Exception("Сделка с ID {$dealId} не найдена");
+            }
+            
+            // 3. Обновляем поля объекта
+            $dealItem->setTitle($title);
+            $dealItem->setOpportunity($sum);
+            $dealItem->setAssignedById($responsibleId);
+            $dealItem->setComments($comment);
+            
+            if ($companyId > 0) {
+                $dealItem->setCompanyId($companyId);
+            }
+            
+            // 4. Получаем операцию обновления
+            $updateOperation = $factory->getUpdateOperation($dealItem);
+            
+            // 5. Отключаем все проверки и события
+            $updateOperation->disableAllChecks();  // Обратите внимание: disableAllChecks, а не disableAllCheck
+            
+            // 6. Выполняем обновление
+            $result = $updateOperation->launch();
+            
+            if (!$result->isSuccess()) {
+                $errors = implode(', ', $result->getErrorMessages());
+                throw new \Exception("Ошибка при обновлении сделки: {$errors}");
+            }
+            
+            self::log('updateDeal - Сделка успешно обновлена (события отключены)', [
+                'DEAL_ID' => $dealId,
+            ]);
+            
+            return true;
+            
+        } catch (\Exception $e) {
+            self::log('updateDeal - ОШИБКА', [
+                'DEAL_ID' => $dealId,
+                'ERROR' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 
     /**
