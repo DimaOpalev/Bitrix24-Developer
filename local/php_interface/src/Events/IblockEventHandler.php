@@ -67,11 +67,14 @@ class IblockEventHandler
         if ($arFields['IBLOCK_ID'] != self::IBLOCK_DEAL_ID) {
             return;
         }
-
+        
+        if (\Otus\Events\CrmDealEventHandler::$isInternalUpdate) {
+            return;
+        }
 
         // Получаем все свойства элемента
         $properties = self::getElementProperties($arFields['ID']);
-        $title = "Сделка по ". $arFields["NAME"];
+        $title = "Сделка: ". $arFields["NAME"];
         $sum = self::getSum($properties);
         $comment = implode(PHP_EOL, $properties["UF_TYPE_WORK"]);
         $responsibleId = $properties["UF_RESPONSIBLE"][0];
@@ -211,6 +214,8 @@ class IblockEventHandler
     /**
      * Обновление существующей сделки (новое API)
      */
+    public static $isInternalUpdate = false;
+
     private static function updateDeal($dealId, $title, $sum, $companyId, $comment, $responsibleId)
     {
         self::log('updateDeal - Начинаем обновление сделки (новое API)', [
@@ -221,58 +226,30 @@ class IblockEventHandler
             'responsibleId' => $responsibleId,
         ]);
 
-        try {
-            // 1. Получаем фабрику для сделок
-            $factory = Container::getInstance()->getFactory(\CCrmOwnerType::Deal);
-            
-            if (!$factory) {
-                throw new \Exception('Не удалось получить фабрику для сделок');
-            }
-            
-            // 2. Получаем объект сделки
-            $dealItem = $factory->getItem($dealId);
-            
-            if (!$dealItem) {
-                throw new \Exception("Сделка с ID {$dealId} не найдена");
-            }
-            
-            // 3. Обновляем поля объекта
-            $dealItem->setTitle($title);
-            $dealItem->setOpportunity($sum);
-            $dealItem->setAssignedById($responsibleId);
-            $dealItem->setComments($comment);
-            
-            if ($companyId > 0) {
-                $dealItem->setCompanyId($companyId);
-            }
-            
-            // 4. Получаем операцию обновления
-            $updateOperation = $factory->getUpdateOperation($dealItem);
-            
-            // 5. Отключаем все проверки и события
-            $updateOperation->disableAllChecks();  // Обратите внимание: disableAllChecks, а не disableAllCheck
-            
-            // 6. Выполняем обновление
-            $result = $updateOperation->launch();
-            
-            if (!$result->isSuccess()) {
-                $errors = implode(', ', $result->getErrorMessages());
-                throw new \Exception("Ошибка при обновлении сделки: {$errors}");
-            }
-            
-            self::log('updateDeal - Сделка успешно обновлена (события отключены)', [
-                'DEAL_ID' => $dealId,
-            ]);
-            
-            return true;
-            
-        } catch (\Exception $e) {
-            self::log('updateDeal - ОШИБКА', [
-                'DEAL_ID' => $dealId,
-                'ERROR' => $e->getMessage(),
-            ]);
-            throw $e;
+        self::$isInternalUpdate = true;
+
+        $deal = new \CCrmDeal(false);
+        
+        $dealFields = [
+            'TITLE' => $title,
+            'OPPORTUNITY' => $sum,
+            'ASSIGNED_BY_ID' => $responsibleId,
+            'COMMENTS' => $comment,
+        ];
+    
+        if ($companyId > 0) {
+            $dealFields['COMPANY_ID'] = $companyId;
         }
+        
+        $result = $deal->Update($dealId, $dealFields);
+        
+        if (!$result) {
+            $error = $deal->LAST_ERROR ?: 'Неизвестная ошибка';
+            throw new \Exception("Ошибка: {$error}");
+        }
+        self::$isInternalUpdate = false;
+        
+        return true;
     }
 
     /**

@@ -19,11 +19,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/local/php_interface/src/Otus/Diag/Fil
 
 $eventManager = EventManager::getInstance();
 
+// ===== СОБЫТИЯ ИНФОБЛОКОВ =====
 $eventManager->addEventHandler(
     "iblock", 
-    "OnBeforeIBlockElementAdd", 
+    "OnAfterIBlockElementAdd", 
     [
-        'Otus\Events\IblockEventHandler', 'onElementBeforeAdd'
+        'Otus\Events\IblockEventHandler', 'OnAfterIBlockElementAdd'
     ]
 );
 
@@ -31,7 +32,7 @@ $eventManager->addEventHandler(
     "iblock", 
     "OnAfterIBlockElementUpdate", 
     [
-        'Otus\Events\IblockEventHandler', 'onElementAfterUpdate'
+        'Otus\Events\IblockEventHandler', 'OnAfterIBlockElementUpdate'
     ]
 );
 
@@ -42,6 +43,20 @@ $eventManager->addEventHandler(
         'Otus\Events\IblockEventHandler', 'onElementBeforeDelete'
     ]
 );
+
+// ===== НОВОЕ СОБЫТИЕ CRM (обновление сделки) =====
+$eventManager->addEventHandler(
+    "crm", 
+    "OnAfterCrmDealUpdate", 
+    ['Otus\Events\CrmDealEventHandler', 'OnAfterCrmDealUpdate']
+);
+
+// // Удаление сделки (перед удалением)
+// $eventManager->addEventHandler(
+//     "crm", 
+//     "OnBeforeCrmDealDelete", 
+//     ['Otus\Event\CrmDealEventHandler', 'onBeforeDealDelete']
+// );
 
 
 /*
