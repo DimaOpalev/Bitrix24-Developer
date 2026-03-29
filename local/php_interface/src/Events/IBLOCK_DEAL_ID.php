@@ -1,2 +1,0 @@
-<?php
-CONST IBLOCK_DEAL_ID = 21;
