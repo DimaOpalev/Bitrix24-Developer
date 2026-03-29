@@ -5,17 +5,17 @@ use Bitrix\Main\Loader;
 use Bitrix\Crm\Service\Container;
 use Bitrix\Crm\Service\Operation\Update;
 
+require_once "IBLOCK_DEAL_ID.php";
+
 class IblockEventHandler
 {
-    const IBLOCK_DEAL_ID = 21;
-
     /**
      * Обработчик перед добавления элемента в инфоблок
      */
     public static function OnAfterIBlockElementAdd(&$arFields)
     {
         // Проверяем, что это наш инфоблок
-        if ($arFields['IBLOCK_ID'] != self::IBLOCK_DEAL_ID) {
+        if ($arFields['IBLOCK_ID'] != IBLOCK_DEAL_ID) {
             return;
         }
 
@@ -64,7 +64,7 @@ class IblockEventHandler
     public static function OnAfterIBlockElementUpdate(&$arFields)
     {
         // Проверяем, что это наш инфоблок
-        if ($arFields['IBLOCK_ID'] != self::IBLOCK_DEAL_ID) {
+        if ($arFields['IBLOCK_ID'] != IBLOCK_DEAL_ID) {
             return;
         }
         
@@ -120,7 +120,7 @@ class IblockEventHandler
     {
         $element = \CIBlockElement::GetByID($id)->Fetch();
         
-        if ($element && $element['IBLOCK_ID'] == self::IBLOCK_DEAL_ID) {
+        if ($element && $element['IBLOCK_ID'] == IBLOCK_DEAL_ID) {
             self::log('onElementBeforeDelete', [
                 'ID' => $id,
                 'NAME' => $element['NAME'],
@@ -135,7 +135,7 @@ class IblockEventHandler
     {
         $properties = [];
         $dbProps = \CIBlockElement::GetProperty(
-            self::IBLOCK_DEAL_ID,
+            IBLOCK_DEAL_ID,
             $elementId,
             [],
             []
@@ -201,7 +201,7 @@ class IblockEventHandler
     {
         \CIBlockElement::SetPropertyValuesEx(
             $elementId,
-            self::IBLOCK_DEAL_ID,
+            IBLOCK_DEAL_ID,
             ['UF_DEAL' => $dealId]
         );
         

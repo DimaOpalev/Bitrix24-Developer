@@ -1,7 +1,9 @@
 <?php
 namespace Otus\Events;
 
-class CrmDealEventHandler extends \Otus\Events\IblockEventHandler
+require_once "IBLOCK_DEAL_ID.php";
+
+class CrmDealEventHandler
 {
     /**
      * Обработчик после обновления сделки
@@ -66,7 +68,7 @@ class CrmDealEventHandler extends \Otus\Events\IblockEventHandler
         $res = \CIBlockElement::GetList(
             [],
             [
-                'IBLOCK_ID' => self::IBLOCK_DEAL_ID,
+                'IBLOCK_ID' => IBLOCK_DEAL_ID,
                 'PROPERTY_UF_DEAL' => $dealId,
                 'ACTIVE' => 'Y',
             ],
@@ -110,7 +112,7 @@ class CrmDealEventHandler extends \Otus\Events\IblockEventHandler
         if (isset($fields['PROPERTY_VALUES']) && !empty($fields['PROPERTY_VALUES'])) {
             \CIBlockElement::SetPropertyValuesEx(
                 $elementId,
-                self::IBLOCK_DEAL_ID,
+                IBLOCK_DEAL_ID,
                 $fields['PROPERTY_VALUES']
             );
         }
