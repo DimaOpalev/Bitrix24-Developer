@@ -18,6 +18,8 @@ class CrmDealEventHandler
 
         $updateFields = self::prepareIblockFields($arFields);
         
+        self::log("updateFields = ", $updateFields);
+        
         self::updateIblockElement($iBlockElementId, $updateFields);
 
         self::log('OnAfterCrmDealUpdate', 
@@ -123,7 +125,7 @@ class CrmDealEventHandler
     /**
      * Логирование
      */
-    private static function log($event, $data)
+    private static function log(string $event, Array $data): void
     {
         $logFile = $_SERVER['DOCUMENT_ROOT'] . '/crm_deal_events.log';
         $logEntry = sprintf(
