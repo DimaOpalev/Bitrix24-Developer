@@ -1,0 +1,158 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 23, 2018, 3:04:03 PM
+    Author     : opalevdg
+*/
+
+.text_error {
+    color: red;
+}
+.error {
+    background-color: #ffefef;
+}
+
+.text-center {
+
+    text-align: center;
+/*    background-color: #cdcdcd;*/
+
+}
+
+thead th {
+    background-color: #cdcdcd;
+}
+
+thead th {
+    background-color: #cdcdcd;
+}
+
+.table th, .table td, #t_body_header th {
+    padding: 4px;
+}
+
+tr.hover:hover{
+    background-color: #efefef;
+}
+
+#wrap_table {
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
+.other {
+    padding: 5px;
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(143,148,151,0.27);
+    border-radius: 10px;
+}
+
+#FIO, #workPlace {
+    font-weight: bold;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.text-right {
+
+    text-align: right;
+
+}
+
+.element:nth-child(1)::before {
+    border-left: none !important;
+    border-bottom: none;
+}
+
+.element {
+    padding: 0px 0 4px 19px;
+    border-left: 1px solid;
+    text-align: left;
+    position: relative;
+}
+
+.element:last-child::before {
+
+    border-left: solid 1px;
+
+}
+
+.element:last-child {
+
+    border-left: none;
+
+}
+
+.element::before {
+    content: '';
+    display: block;
+    border-bottom: solid 1px;
+    position: absolute;
+    width: 18px;
+    height: 11px;
+    left: 0;
+    top: 0;
+}
+    
+#spisok_user {
+    display: table;
+    width: 100%;
+}
+
+.client {
+    display: table-cell;
+    padding: 4px;
+    width: 300px;
+}
+
+.date {
+    display: table-cell;
+    width: 150px;
+}
+
+.action {
+    display: table-cell;
+    padding: 4px;
+}
+
+.result {
+    display: table-cell;
+    padding: 4px;
+}
+
+.row:hover {
+    background-color: #dadada;
+}
+label:hover {
+    background-color: #dadada;
+    border-radius: 4px;
+}
+label {
+    display: block;
+    padding: 4px;
+}
+
+.INPUT_CHECK_IBLOCK:checked + label {
+
+    background-color: gray;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+
+}
+.INPUT_CHECK_IBLOCK {
+
+    display: none;
+
+}
+
+#insertCompanyStructure {
+    height: 400px;
+    overflow: auto;
+}

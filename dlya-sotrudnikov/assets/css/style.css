@@ -1,0 +1,33 @@
+.list_services {
+    vertical-align: top;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.list_services .item {
+    list-style-type: none;
+    display: table-cell;
+    margin: 12px;
+    padding: 10px;
+}
+
+.img {
+
+    text-align: center;
+
+}
+
+.img img {
+
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 6px solid #5B9BD5;
+
+}
+
+.list_services .item .title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+}
