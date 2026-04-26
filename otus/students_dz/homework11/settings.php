@@ -1,8 +1,8 @@
 <?php
-//define('C_REST_CLIENT_ID','local.5c8bb1b0891cf2.87252039');//Application ID
-//define('C_REST_CLIENT_SECRET','SakeVG5mbRdcQet45UUrt6q72AMTo7fkwXSO7Y5LYFYNCRsA6f');//Application key
+// define('C_REST_CLIENT_ID','local.69d24c9e92e9f4.23836971');//Application ID
+// define('C_REST_CLIENT_SECRET','GP6N376PIoc8bLL6Ay017U56azxuQym16fNeGdf2NTl8nrKNy1');//Application key
 // or
-//define('C_REST_WEB_HOOK_URL','https://rest-api.bitrix24.com/rest/1/doutwqkjxgc3mgc1/');//url on creat Webhook
+define('C_REST_WEB_HOOK_URL','https://cv174341.tw1.ru/otus/students_dz/homework11/handler.php');//url on creat Webhook
 
 //define('C_REST_CURRENT_ENCODING','windows-1251');
 //define('C_REST_IGNORE_SSL',true);//turn off validate ssl by curl

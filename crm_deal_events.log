@@ -1,0 +1,821 @@
+[2026-03-30 00:04:09] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => Заявка №33
+Разработка бизнес процесса
+Тестирование
+Запуск в продакшн
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 12
+    [DATE_CREATE] => 29.03.2026 23:58:08
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 30.03.2026 00:04:08
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 10
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Заказ на разработку бизнес-процесса
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 200001
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 200001
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 29.03.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 05.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 12 Сделка: Заказ на разработку бизнес-процесса 200000.00 Российский рубль Qzvgevl Bcnyri Bcnyri ООО "ИТ-ОТКРЫТИЕ СЕРВИС" Продажа Новая 29.03.2026 05.04.2026 Заявка №33
+Разработка бизнес процесса
+Тестирование
+Запуск в продакшн Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 29.03.2026 23:58:08
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 29.03.2026 23:58:08
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-03-30 00:04:59] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => Заявка №33
+Разработка бизнес процесса
+Тестирование
+Запуск в продакшн
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 12
+    [DATE_CREATE] => 29.03.2026 23:58:08
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 30.03.2026 00:04:59
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 10
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Заказ на разработку бизнес-процесса
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 200002
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 200002
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 29.03.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 05.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 12 Сделка: Заказ на разработку бизнес-процесса 200001.00 Российский рубль Qzvgevl Bcnyri Bcnyri ООО "ИТ-ОТКРЫТИЕ СЕРВИС" Продажа Новая 29.03.2026 05.04.2026 Заявка №33
+Разработка бизнес процесса
+Тестирование
+Запуск в продакшн Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 29.03.2026 23:58:08
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 29.03.2026 23:58:08
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-03-30 18:50:48] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => Заявка №34
+Настройка сервера
+Настройка web окружения
+Установка портала
+Тестирование
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 13
+    [DATE_CREATE] => 30.03.2026 18:50:29
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 30.03.2026 18:50:47
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 8
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Установка корп.портала!
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 150012
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 150012
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 30.03.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 06.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 13 Сделка: Установка корп.портала! 150000.00 Российский рубль Qzvgevl Bcnyri Bcnyri ПАО СБЕРБАНК Продажа Новая 30.03.2026 06.04.2026 Заявка №34
+Настройка сервера
+Настройка jro окружения
+Установка портала
+Тестирование Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 30.03.2026 18:50:29
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 30.03.2026 18:50:29
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-03-30 18:51:30] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => Заявка №34
+Настройка сервера
+Настройка web окружения
+Установка портала
+Тестирование
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 13
+    [DATE_CREATE] => 30.03.2026 18:50:29
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 30.03.2026 18:51:30
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 8
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Установка корп.портала
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 150012
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 150012
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 30.03.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 06.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 13 Сделка: Установка корп.портала! 150012.00 Российский рубль Qzvgevl Bcnyri Bcnyri ПАО СБЕРБАНК Продажа Новая 30.03.2026 06.04.2026 Заявка №34
+Настройка сервера
+Настройка jro окружения
+Установка портала
+Тестирование Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 30.03.2026 18:50:29
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 30.03.2026 18:50:29
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-03-30 18:55:36] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => Заявка №34
+Настройка сервера
+Настройка web окружения
+Установка портала
+Тестирование
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 13
+    [DATE_CREATE] => 30.03.2026 18:50:29
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 30.03.2026 18:55:35
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 8
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Установка корп.портала
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 150023
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 150023
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 30.03.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 06.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 13 Сделка: Установка корп.портала 150012.00 Российский рубль Qzvgevl Bcnyri Bcnyri ПАО СБЕРБАНК Продажа Новая 30.03.2026 06.04.2026 Заявка №34
+Настройка сервера
+Настройка jro окружения
+Установка портала
+Тестирование Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 30.03.2026 18:50:29
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 30.03.2026 18:50:29
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-04-03 20:34:07] updateFields = : Array
+(
+    [NAME] => Е123
+    [PROPERTY_VALUES] => Array
+        (
+            [UF_SUM] => 1230001
+            [UF_RESPONSIBLE] => 1
+        )
+
+)
+
+[2026-04-05 19:25:13] updateFields = : Array
+(
+    [NAME] => Е123
+    [PROPERTY_VALUES] => Array
+        (
+            [UF_SUM] => 300000
+            [UF_RESPONSIBLE] => 1
+        )
+
+)
+
+[2026-04-05 19:25:13] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => 1234
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 21
+    [DATE_CREATE] => 03.04.2026 20:32:38
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 05.04.2026 19:25:13
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Е123
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 300000
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 300000
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 03.04.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 10.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 21 Сделка: Е123 200000.00 Российский рубль Qzvgevl Bcnyri Bcnyri Продажа Новая 03.04.2026 10.04.2026 1234 Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 03.04.2026 20:32:38
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 03.04.2026 20:32:38
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-04-05 19:26:38] updateFields = : Array
+(
+    [NAME] => Ntcnjdfz pfzdrf
+    [PROPERTY_VALUES] => Array
+        (
+            [UF_SUM] => 200000
+            [UF_RESPONSIBLE] => 1
+        )
+
+)
+
+[2026-04-05 19:26:38] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => Заявка №41
+test
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 23
+    [DATE_CREATE] => 05.04.2026 19:26:10
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 05.04.2026 19:26:38
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Ntcnjdfz pfzdrf
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 200000
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 200000
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 05.04.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 12.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 23 Сделка: Agpawqsm csmqes 0.00 Российский рубль Qzvgevl Bcnyri Bcnyri Продажа Новая 05.04.2026 12.04.2026 Заявка №41
+grfg Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 05.04.2026 19:26:10
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 05.04.2026 19:26:10
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+
+[2026-04-05 19:28:49] updateFields = : Array
+(
+    [NAME] => 111111
+    [PROPERTY_VALUES] => Array
+        (
+            [UF_SUM] => 3333
+            [UF_RESPONSIBLE] => 1
+        )
+
+)
+
+[2026-04-10 09:54:08] updateFields = : Array
+(
+    [NAME] => Е123
+    [PROPERTY_VALUES] => Array
+        (
+            [UF_SUM] => 300000
+            [UF_RESPONSIBLE] => 1
+        )
+
+)
+
+[2026-04-10 09:54:08] OnAfterCrmDealUpdate: Array
+(
+    [PRODUCT_ROWS] => Array
+        (
+        )
+
+    [OBSERVER_IDS] => Array
+        (
+        )
+
+    [COMMENTS] => 1234
+    [CONTACT_BINDINGS] => Array
+        (
+        )
+
+    [CONTACT_IDS] => Array
+        (
+        )
+
+    [CONTACT_ID] => 0
+    [UTM_SOURCE] => 
+    [UTM_MEDIUM] => 
+    [UTM_CAMPAIGN] => 
+    [UTM_CONTENT] => 
+    [UTM_TERM] => 
+    [ID] => 21
+    [DATE_CREATE] => 03.04.2026 20:32:38
+    [DATE_CREATE_SHORT] => 
+    [DATE_MODIFY] => 10.04.2026 09:54:08
+    [DATE_MODIFY_SHORT] => 
+    [CREATED_BY_ID] => 1
+    [MODIFY_BY_ID] => 1
+    [ASSIGNED_BY_ID] => 1
+    [OPENED] => Y
+    [LEAD_ID] => 
+    [COMPANY_ID] => 
+    [QUOTE_ID] => 
+    [TITLE] => Сделка: Е123
+    [PRODUCT_ID] => 
+    [CATEGORY_ID] => 0
+    [STAGE_ID] => NEW
+    [STAGE_SEMANTIC_ID] => P
+    [IS_NEW] => Y
+    [IS_RECURRING] => N
+    [IS_RETURN_CUSTOMER] => N
+    [IS_REPEATED_APPROACH] => N
+    [CLOSED] => N
+    [TYPE_ID] => SALE
+    [OPPORTUNITY] => 300000
+    [IS_MANUAL_OPPORTUNITY] => Y
+    [TAX_VALUE] => 0
+    [CURRENCY_ID] => RUB
+    [OPPORTUNITY_ACCOUNT] => 300000
+    [TAX_VALUE_ACCOUNT] => 0
+    [ACCOUNT_CURRENCY_ID] => RUB
+    [PROBABILITY] => 
+    [BEGINDATE] => 03.04.2026
+    [BEGINDATE_SHORT] => 
+    [CLOSEDATE] => 10.04.2026
+    [CLOSEDATE_SHORT] => 
+    [EVENT_DATE] => 
+    [EVENT_DATE_SHORT] => 
+    [EVENT_ID] => 
+    [EVENT_DESCRIPTION] => 
+    [EXCH_RATE] => 1
+    [LOCATION_ID] => 
+    [WEBFORM_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [ORIGINATOR_ID] => 
+    [ORIGIN_ID] => 
+    [ADDITIONAL_INFO] => 
+    [SEARCH_CONTENT] => 21 Сделка: Е123 300000.00 Российский рубль Qzvgevl Bcnyri Bcnyri Продажа Новая 03.04.2026 10.04.2026 1234 Веб-сайт Из инфоблока заявок
+    [ORDER_STAGE] => 
+    [MOVED_BY_ID] => 1
+    [MOVED_TIME] => 03.04.2026 20:32:38
+    [LAST_ACTIVITY_BY] => 1
+    [LAST_ACTIVITY_TIME] => 08.04.2026 16:00:00
+    [IS_WORK] => 
+    [IS_WON] => 
+    [IS_LOSE] => 
+    [RECEIVED_AMOUNT] => 
+    [LOST_AMOUNT] => 
+    [HAS_PRODUCTS] => 
+    [LAST_COMMUNICATION_TIME] => 
+    [LAST_COMMUNICATION_CALL_TIME] => 
+    [LAST_COMMUNICATION_EMAIL_TIME] => 
+    [LAST_COMMUNICATION_IMOL_TIME] => 
+    [LAST_COMMUNICATION_WEBFORM_TIME] => 
+)
+

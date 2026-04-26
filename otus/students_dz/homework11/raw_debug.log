@@ -1,0 +1,75 @@
+14:51:34 - AUTH_ID=d65ad269008312320082d5ae000000010000078da537c89f78761c891be9346fca32f4&AUTH_EXPIRES=3600&REFRESH_ID=c6d9f969008312320082d5ae00000001000007fad7d214d8d533027e6f6004c6e76b0e&SERVER_ENDPOINT=https%3A%2F%2Foauth.bitrix24.tech%2Frest%2F&member_id=fa832ad875f1ff65768e5d6deedc361b&status=L&PLACEMENT=DEFAULT&PLACEMENT_OPTIONS=%7B%22install_finished%22%3A%22Y%22%7D
+14:53:40 - AUTH_ID=545bd269008312320082d5ae00000001000007bf525641e7c4aabfbf0f135b51eb3391&AUTH_EXPIRES=3600&REFRESH_ID=44daf969008312320082d5ae0000000100000742c277d65778630e3d5a669fd3a7dfb8&SERVER_ENDPOINT=https%3A%2F%2Foauth.bitrix24.tech%2Frest%2F&member_id=fa832ad875f1ff65768e5d6deedc361b&status=L&PLACEMENT=DEFAULT&PLACEMENT_OPTIONS=%7B%22IFRAME%22%3A%22Y%22%2C%22IFRAME_TYPE%22%3A%22SIDE_SLIDER%22%7D
+14:58:01 - AUTH_ID=595cd269008312320082d5ae00000001000007060cea373148b59ed98da99494ae113a&AUTH_EXPIRES=3600&REFRESH_ID=49dbf969008312320082d5ae000000010000073acf4e536e310ac3384bbecfe4847dba&SERVER_ENDPOINT=https%3A%2F%2Foauth.bitrix24.tech%2Frest%2F&member_id=fa832ad875f1ff65768e5d6deedc361b&status=L&PLACEMENT=DEFAULT&PLACEMENT_OPTIONS=%7B%22install_finished%22%3A%22Y%22%7D
+14:58:01 - Array
+(
+    [AUTH_ID] => 595cd269008312320082d5ae00000001000007060cea373148b59ed98da99494ae113a
+    [AUTH_EXPIRES] => 3600
+    [REFRESH_ID] => 49dbf969008312320082d5ae000000010000073acf4e536e310ac3384bbecfe4847dba
+    [SERVER_ENDPOINT] => https://oauth.bitrix24.tech/rest/
+    [member_id] => fa832ad875f1ff65768e5d6deedc361b
+    [status] => L
+    [PLACEMENT] => DEFAULT
+    [PLACEMENT_OPTIONS] => {"install_finished":"Y"}
+)
+
+15:00:59 -     <head>
+        <script src="//api.bitrix24.com/api/v1/"></script>
+        
+                <script>
+                    BX24.init(function(){
+                        // Сообщаем Битриксу, что установка завершена
+                        BX24.installFinish();
+                    });
+                </script>
+
+            </head>
+    <body>
+        array(2) {
+  ["error"]=>
+  string(10) "ERROR_CORE"
+  ["error_description"]=>
+  string(51) "Unable to set event handler: Handler already binded"
+}
+array(2) {
+  ["error"]=>
+  string(10) "ERROR_CORE"
+  ["error_description"]=>
+  string(51) "Unable to set event handler: Handler already binded"
+}
+array(2) {
+  ["error"]=>
+  string(10) "ERROR_CORE"
+  ["error_description"]=>
+  string(51) "Unable to set event handler: Handler already binded"
+}
+
+                    Установка успешно завершена! События зарегистрированы.
+            </body>
+
+15:01:02 - AUTH_ID=0e5dd269008312320082d5ae00000001000007510e56e0ebaaa384af1aaf5e34b794f0&AUTH_EXPIRES=3600&REFRESH_ID=fedbf969008312320082d5ae00000001000007f2adec0d2d3d5e83f6bc6727ddfc7b0e&SERVER_ENDPOINT=https%3A%2F%2Foauth.bitrix24.tech%2Frest%2F&member_id=fa832ad875f1ff65768e5d6deedc361b&status=L&PLACEMENT=DEFAULT&PLACEMENT_OPTIONS=%7B%22install_finished%22%3A%22Y%22%7D
+15:01:02 - Array
+(
+    [AUTH_ID] => 0e5dd269008312320082d5ae00000001000007510e56e0ebaaa384af1aaf5e34b794f0
+    [AUTH_EXPIRES] => 3600
+    [REFRESH_ID] => fedbf969008312320082d5ae00000001000007f2adec0d2d3d5e83f6bc6727ddfc7b0e
+    [SERVER_ENDPOINT] => https://oauth.bitrix24.tech/rest/
+    [member_id] => fa832ad875f1ff65768e5d6deedc361b
+    [status] => L
+    [PLACEMENT] => DEFAULT
+    [PLACEMENT_OPTIONS] => {"install_finished":"Y"}
+)
+
+15:02:03 - AUTH_ID=4b5dd269008312320082d5ae00000001000007b9040e77073c95d356bbc72fe004f0d0&AUTH_EXPIRES=3600&REFRESH_ID=3bdcf969008312320082d5ae00000001000007530131c85abe63ef5da5dc24264f5314&SERVER_ENDPOINT=https%3A%2F%2Foauth.bitrix24.tech%2Frest%2F&member_id=fa832ad875f1ff65768e5d6deedc361b&status=L&PLACEMENT=DEFAULT&PLACEMENT_OPTIONS=%7B%22IFRAME%22%3A%22Y%22%2C%22IFRAME_TYPE%22%3A%22SIDE_SLIDER%22%7D
+15:02:03 - Array
+(
+    [AUTH_ID] => 4b5dd269008312320082d5ae00000001000007b9040e77073c95d356bbc72fe004f0d0
+    [AUTH_EXPIRES] => 3600
+    [REFRESH_ID] => 3bdcf969008312320082d5ae00000001000007530131c85abe63ef5da5dc24264f5314
+    [SERVER_ENDPOINT] => https://oauth.bitrix24.tech/rest/
+    [member_id] => fa832ad875f1ff65768e5d6deedc361b
+    [status] => L
+    [PLACEMENT] => DEFAULT
+    [PLACEMENT_OPTIONS] => {"IFRAME":"Y","IFRAME_TYPE":"SIDE_SLIDER"}
+)
+

@@ -1,0 +1,2072 @@
+[2026-03-29 23:58:08] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: Заказ на разработку бизнес-процесса
+    [OPPORTUNITY] => 200000
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-03-29
+    [CLOSEDATE] => 2026-04-29
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMPANY_ID] => 10
+    [COMMENTS] => Заявка №33
+Разработка бизнес процесса
+Тестирование
+Запуск в продакшн
+)
+
+[2026-03-29 23:58:08] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 33
+    [DEAL_ID] => 12
+)
+
+[2026-03-29 23:58:08] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => Заказ на разработку бизнес-процесса
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [103] => Array
+                                (
+                                    [VALUE] => Разработка бизнес процесса
+                                )
+
+                            [104] => Array
+                                (
+                                    [VALUE] => Тестирование
+                                )
+
+                            [105] => Array
+                                (
+                                    [VALUE] => Запуск в продакшн
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [101] => 4345507470
+                        )
+
+                    [68] => Array
+                        (
+                            [100] => Array
+                                (
+                                    [VALUE] => 200000|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [124] => Array
+                                (
+                                    [VALUE] => CO_10
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => ЗАКАЗ НА РАЗРАБОТКУ БИЗНЕС-ПРОЦЕССА
+DMITRIY OPALEV
+РАЗРАБОТКА БИЗНЕС ПРОЦЕССА
+ТЕСТИРОВАНИЕ
+ЗАПУСК В ПРОДАКШН
+4345507470
+200000|RUB
+ООО "ИТ-ОТКРЫТИЕ СЕРВИС"
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 33
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => Разработка бизнес процесса
+                    [1] => Тестирование
+                    [2] => Запуск в продакшн
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 4345507470
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 200000|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => CO_10
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-03-30 18:50:29] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: Установка корп.портала!
+    [OPPORTUNITY] => 150000
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-03-30
+    [CLOSEDATE] => 2026-04-30
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMPANY_ID] => 8
+    [COMMENTS] => Заявка №34
+Настройка сервера
+Настройка web окружения
+Установка портала
+Тестирование
+)
+
+[2026-03-30 18:50:30] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 34
+    [DEAL_ID] => 13
+)
+
+[2026-03-30 18:50:30] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => Установка корп.портала!
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [108] => Array
+                                (
+                                    [VALUE] => Настройка сервера
+                                )
+
+                            [109] => Array
+                                (
+                                    [VALUE] => Настройка web окружения
+                                )
+
+                            [110] => Array
+                                (
+                                    [VALUE] => Установка портала
+                                )
+
+                            [111] => Array
+                                (
+                                    [VALUE] => Тестирование
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [107] => 7707083893
+                        )
+
+                    [68] => Array
+                        (
+                            [106] => Array
+                                (
+                                    [VALUE] => 150000|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [112] => Array
+                                (
+                                    [VALUE] => CO_8
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => УСТАНОВКА КОРП.ПОРТАЛА!
+DMITRIY OPALEV
+НАСТРОЙКА СЕРВЕРА
+НАСТРОЙКА WEB ОКРУЖЕНИЯ
+УСТАНОВКА ПОРТАЛА
+ТЕСТИРОВАНИЕ
+7707083893
+150000|RUB
+ПАО СБЕРБАНК
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 34
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => Настройка сервера
+                    [1] => Настройка web окружения
+                    [2] => Установка портала
+                    [3] => Тестирование
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 7707083893
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 150000|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => CO_8
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-03-31 23:02:57] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [IBLOCK_SECTION_ID] => 
+            [NAME] => T1
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 14
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => T11
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => T1
+DMITRIY OPALEV
+T1
+T11
+            [RESULT_MESSAGE] => Обязательное свойство "ИНН Заказчика" не заполнено.<br>
+            [RESULT] => 
+        )
+
+)
+
+[2026-03-31 23:02:57] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: T1
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-03-31
+    [CLOSEDATE] => 2026-05-01
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №
+
+)
+
+[2026-03-31 23:02:58] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 
+    [DEAL_ID] => 15
+)
+
+[2026-03-31 23:02:58] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 
+    [DEAL_ID] => 15
+)
+
+[2026-03-31 23:03:04] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [NAME] => T1
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 14
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => T11
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [n0] => 7717587
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => T1
+DMITRIY OPALEV
+T1
+T11
+7717587
+            [CREATED_BY] => 1
+            [~DATE_CREATE] => now()
+            [~TIMESTAMP_X] => now()
+            [XML_ID] => 38
+            [ID] => 38
+            [RESULT] => 38
+        )
+
+)
+
+[2026-03-31 23:03:04] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: T1
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-03-31
+    [CLOSEDATE] => 2026-05-01
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №38
+T11
+)
+
+[2026-03-31 23:03:05] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 38
+    [DEAL_ID] => 16
+)
+
+[2026-03-31 23:03:05] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 38
+    [DEAL_ID] => 16
+)
+
+[2026-03-31 23:03:18] updateDeal - Начинаем обновление сделки (новое API): Array
+(
+    [DEAL_ID] => 16
+    [title] => Сделка: T1
+    [sum] => 125321
+    [companyId] => 0
+    [responsibleId] => 
+)
+
+[2026-03-31 23:03:18] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => T1
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [139] => Array
+                                (
+                                    [VALUE] => 16
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [137] => Array
+                                (
+                                    [VALUE] => T11
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [136] => 7717587
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 125321|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => T1
+DMITRIY OPALEV
+СДЕЛКА: T1
+T11
+7717587
+125321|RUB
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 38
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 16
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => T11
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 7717587
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 125321|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-04-02 18:42:09] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: T2
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-02
+    [CLOSEDATE] => 2026-05-02
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMPANY_ID] => 11
+    [COMMENTS] => Заявка №37
+fd
+qqq
+)
+
+[2026-04-02 18:42:10] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 37
+    [DEAL_ID] => 17
+)
+
+[2026-04-02 18:42:10] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => T2
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [126] => Array
+                                (
+                                    [VALUE] => fd
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => qqq
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [125] => 7736050003
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [127] => Array
+                                (
+                                    [VALUE] => CO_11
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => T2
+DMITRIY OPALEV
+FD
+QQQ
+7736050003
+ПАО "ГАЗПРОМ"
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 37
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => fd
+                    [1] => qqq
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 7736050003
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => CO_11
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-04-02 18:42:39] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [IBLOCK_SECTION_ID] => 
+            [NAME] => t3
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => T3
+DMITRIY OPALEV
+            [RESULT_MESSAGE] => Обязательное свойство "Вид работ" не заполнено.<br>Обязательное свойство "ИНН Заказчика" не заполнено.<br>
+            [RESULT] => 
+        )
+
+)
+
+[2026-04-02 18:42:39] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: t3
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-02
+    [CLOSEDATE] => 2026-05-02
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №
+
+)
+
+[2026-04-02 18:42:39] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 
+    [DEAL_ID] => 18
+)
+
+[2026-04-02 18:42:39] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 
+    [DEAL_ID] => 18
+)
+
+[2026-04-02 18:42:48] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [NAME] => t3
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 111
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [n0] => 1111
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => T3
+DMITRIY OPALEV
+111
+1111
+            [CREATED_BY] => 1
+            [~DATE_CREATE] => now()
+            [~TIMESTAMP_X] => now()
+            [XML_ID] => 39
+            [ID] => 39
+            [RESULT] => 39
+        )
+
+)
+
+[2026-04-02 18:42:48] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: t3
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-02
+    [CLOSEDATE] => 2026-05-02
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №39
+111
+)
+
+[2026-04-02 18:42:49] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 39
+    [DEAL_ID] => 19
+)
+
+[2026-04-02 18:42:49] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 39
+    [DEAL_ID] => 19
+)
+
+[2026-04-02 18:43:12] updateDeal - Начинаем обновление сделки (новое API): Array
+(
+    [DEAL_ID] => 19
+    [title] => Сделка: t3
+    [sum] => 0
+    [companyId] => 0
+    [responsibleId] => 
+)
+
+[2026-04-02 18:43:12] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => t3
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [145] => Array
+                                (
+                                    [VALUE] => 19
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [144] => Array
+                                (
+                                    [VALUE] => 111
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [143] => 7717587
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => T3
+DMITRIY OPALEV
+СДЕЛКА: T3
+111
+7717587
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 39
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 19
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => 111
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 7717587
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-04-03 20:32:38] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [NAME] => Е123
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 20
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 1234
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [n0] => 4444
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 125521|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => Е123
+DMITRIY OPALEV
+Е123
+1234
+4444
+125521|RUB
+            [CREATED_BY] => 1
+            [~DATE_CREATE] => now()
+            [~TIMESTAMP_X] => now()
+            [XML_ID] => 40
+            [ID] => 40
+            [RESULT] => 40
+        )
+
+)
+
+[2026-04-03 20:32:38] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: Е123
+    [OPPORTUNITY] => 125521
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-03
+    [CLOSEDATE] => 2026-05-03
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №40
+1234
+)
+
+[2026-04-03 20:32:38] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 40
+    [DEAL_ID] => 21
+)
+
+[2026-04-03 20:32:38] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 40
+    [DEAL_ID] => 21
+)
+
+[2026-04-03 20:33:54] updateDeal - Начинаем обновление сделки (новое API): Array
+(
+    [DEAL_ID] => 21
+    [title] => Сделка: Е123
+    [sum] => 125000
+    [companyId] => 0
+    [responsibleId] => 
+)
+
+[2026-04-03 20:33:55] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => Е123
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [150] => Array
+                                (
+                                    [VALUE] => 21
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [148] => Array
+                                (
+                                    [VALUE] => 1234
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [147] => 4444
+                        )
+
+                    [68] => Array
+                        (
+                            [146] => Array
+                                (
+                                    [VALUE] => 125000|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => Е123
+DMITRIY OPALEV
+СДЕЛКА: Е123
+1234
+4444
+125000|RUB
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 40
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 21
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => 1234
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 4444
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 125000|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-04-05 19:24:44] updateDeal - Начинаем обновление сделки (новое API): Array
+(
+    [DEAL_ID] => 21
+    [title] => Сделка: Е123
+    [sum] => 200000
+    [companyId] => 0
+    [responsibleId] => 
+)
+
+[2026-04-05 19:24:44] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => Е123
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [150] => Array
+                                (
+                                    [VALUE] => 21
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [148] => Array
+                                (
+                                    [VALUE] => 1234
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [147] => 4444
+                        )
+
+                    [68] => Array
+                        (
+                            [146] => Array
+                                (
+                                    [VALUE] => 200000|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => Е123
+DMITRIY OPALEV
+СДЕЛКА: Е123
+1234
+4444
+200000|RUB
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 40
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 21
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => 1234
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 4444
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 200000|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
+[2026-04-05 19:25:59] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [IBLOCK_SECTION_ID] => 
+            [NAME] => Ntcnjdfz pfzdrf
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 14
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => test
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => NTCNJDFZ PFZDRF
+DMITRIY OPALEV
+T1
+TEST
+            [RESULT_MESSAGE] => Обязательное свойство "ИНН Заказчика" не заполнено.<br>
+            [RESULT] => 
+        )
+
+)
+
+[2026-04-05 19:25:59] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: Ntcnjdfz pfzdrf
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-05
+    [CLOSEDATE] => 2026-05-05
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №
+
+)
+
+[2026-04-05 19:26:00] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 
+    [DEAL_ID] => 22
+)
+
+[2026-04-05 19:26:00] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 
+    [DEAL_ID] => 22
+)
+
+[2026-04-05 19:26:09] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [IBLOCK_ID] => 18
+            [NAME] => Ntcnjdfz pfzdrf
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 14
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => test
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [n0] => 77777
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [SEARCHABLE_CONTENT] => NTCNJDFZ PFZDRF
+DMITRIY OPALEV
+T1
+TEST
+77777
+            [CREATED_BY] => 1
+            [~DATE_CREATE] => now()
+            [~TIMESTAMP_X] => now()
+            [XML_ID] => 41
+            [ID] => 41
+            [RESULT] => 41
+        )
+
+)
+
+[2026-04-05 19:26:09] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: Ntcnjdfz pfzdrf
+    [OPPORTUNITY] => 0
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-05
+    [CLOSEDATE] => 2026-05-05
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №41
+test
+)
+
+[2026-04-05 19:26:10] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 41
+    [DEAL_ID] => 23
+)
+
+[2026-04-05 19:26:10] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 41
+    [DEAL_ID] => 23
+)
+
+[2026-04-05 19:27:03] updateDeal - Начинаем обновление сделки (новое API): Array
+(
+    [DEAL_ID] => 23
+    [title] => Сделка: Ntcnjdfz pfzdrf
+    [sum] => 100000
+    [companyId] => 0
+    [responsibleId] => 1
+)
+
+[2026-04-05 19:27:03] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [NAME] => Ntcnjdfz pfzdrf
+            [DATE_CREATE] => 
+            [MODIFIED_BY] => 1
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [156] => Array
+                                (
+                                    [VALUE] => 23
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [154] => Array
+                                (
+                                    [VALUE] => test
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [153] => 77777
+                        )
+
+                    [68] => Array
+                        (
+                            [157] => Array
+                                (
+                                    [VALUE] => 100000|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => 1
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => NTCNJDFZ PFZDRF
+DMITRIY OPALEV
+СДЕЛКА: NTCNJDFZ PFZDRF
+TEST
+77777
+100000|RUB
+DMITRIY OPALEV
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [ID] => 41
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 23
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => test
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 77777
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 100000|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 1
+                )
+
+        )
+
+)
+
+[2026-04-05 19:28:05] onAfterIBlockElementAdd - Перед созданием записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [ACTIVE] => Y
+            [MODIFIED_BY] => 1
+            [IBLOCK_ID] => 18
+            [ACTIVE_FROM] => 
+            [ACTIVE_TO] => 
+            [SORT] => 500
+            [NAME] => 111111
+            [CODE] => 
+            [TAGS] => 
+            [PREVIEW_TEXT] => 
+            [PREVIEW_TEXT_TYPE] => text
+            [DETAIL_TEXT] => 
+            [DETAIL_TEXT_TYPE] => text
+            [TMP_ID] => 0
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n1] => Array
+                                (
+                                    [VALUE] => 2222
+                                )
+
+                            [n2] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n3] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n4] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 3333
+                                )
+
+                        )
+
+                    [68] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 1111|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [IPROPERTY_TEMPLATES] => Array
+                (
+                    [ELEMENT_META_TITLE] => 
+                    [ELEMENT_META_KEYWORDS] => 
+                    [ELEMENT_META_DESCRIPTION] => 
+                    [ELEMENT_PAGE_TITLE] => 
+                    [ELEMENT_PREVIEW_PICTURE_FILE_ALT] => 
+                    [ELEMENT_PREVIEW_PICTURE_FILE_TITLE] => 
+                    [ELEMENT_PREVIEW_PICTURE_FILE_NAME] => 
+                    [ELEMENT_DETAIL_PICTURE_FILE_ALT] => 
+                    [ELEMENT_DETAIL_PICTURE_FILE_TITLE] => 
+                    [ELEMENT_DETAIL_PICTURE_FILE_NAME] => 
+                )
+
+            [BP_PUBLISHED] => N
+            [WF_STATUS_ID] => 2
+            [WF_NEW] => Y
+            [SEARCHABLE_CONTENT] => 111111
+DMITRIY OPALEV
+2222
+3333
+1111|RUB
+            [CREATED_BY] => 1
+            [~DATE_CREATE] => now()
+            [~TIMESTAMP_X] => now()
+            [XML_ID] => 42
+            [ID] => 42
+            [RESULT] => 42
+        )
+
+)
+
+[2026-04-05 19:28:05] createDeal - Параметры сделки: Array
+(
+    [TITLE] => Сделка: 111111
+    [OPPORTUNITY] => 1111
+    [CURRENCY_ID] => RUB
+    [ASSIGNED_BY_ID] => 
+    [BEGINDATE] => 2026-04-05
+    [CLOSEDATE] => 2026-05-05
+    [OPENED] => Y
+    [STAGE_ID] => NEW
+    [CATEGORY_ID] => 0
+    [SOURCE_ID] => WEB
+    [SOURCE_DESCRIPTION] => Из инфоблока заявок
+    [COMMENTS] => Заявка №42
+2222
+)
+
+[2026-04-05 19:28:06] updateDealField - Поле UF_DEAL обновлено: Array
+(
+    [ELEMENT_ID] => 42
+    [DEAL_ID] => 24
+)
+
+[2026-04-05 19:28:06] OnAfterIBlockElementAdd - Сделка успешно создана: Array
+(
+    [ELEMENT_ID] => 42
+    [DEAL_ID] => 24
+)
+
+[2026-04-05 19:28:28] updateDeal - Начинаем обновление сделки (новое API): Array
+(
+    [DEAL_ID] => 24
+    [title] => Сделка: 111111
+    [sum] => 2222
+    [companyId] => 0
+    [responsibleId] => 
+)
+
+[2026-04-05 19:28:29] OnAfterIBlockElementUpdate - Перед изменением записи в инфоблок: Array
+(
+    [0] => Array
+        (
+            [ACTIVE] => Y
+            [MODIFIED_BY] => 1
+            [ACTIVE_FROM] => 
+            [ACTIVE_TO] => 
+            [SORT] => 500
+            [NAME] => 111111
+            [CODE] => 
+            [TAGS] => 
+            [PREVIEW_TEXT] => 
+            [PREVIEW_TEXT_TYPE] => text
+            [DETAIL_TEXT] => 
+            [DETAIL_TEXT_TYPE] => text
+            [TMP_ID] => 0
+            [PROPERTY_VALUES] => Array
+                (
+                    [72] => Array
+                        (
+                            [163] => Array
+                                (
+                                    [VALUE] => 24
+                                )
+
+                        )
+
+                    [71] => Array
+                        (
+                            [162] => Array
+                                (
+                                    [VALUE] => 2222
+                                )
+
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n1] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n2] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n3] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                            [n4] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [69] => Array
+                        (
+                            [161] => Array
+                                (
+                                    [VALUE] => 3333
+                                )
+
+                        )
+
+                    [68] => Array
+                        (
+                            [160] => Array
+                                (
+                                    [VALUE] => 2222|RUB
+                                )
+
+                        )
+
+                    [70] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                    [73] => Array
+                        (
+                            [n0] => Array
+                                (
+                                    [VALUE] => 
+                                )
+
+                        )
+
+                )
+
+            [IBLOCK_SECTION] => Array
+                (
+                )
+
+            [IPROPERTY_TEMPLATES] => Array
+                (
+                    [ELEMENT_META_TITLE] => 
+                    [ELEMENT_META_KEYWORDS] => 
+                    [ELEMENT_META_DESCRIPTION] => 
+                    [ELEMENT_PAGE_TITLE] => 
+                    [ELEMENT_PREVIEW_PICTURE_FILE_ALT] => 
+                    [ELEMENT_PREVIEW_PICTURE_FILE_TITLE] => 
+                    [ELEMENT_PREVIEW_PICTURE_FILE_NAME] => 
+                    [ELEMENT_DETAIL_PICTURE_FILE_ALT] => 
+                    [ELEMENT_DETAIL_PICTURE_FILE_TITLE] => 
+                    [ELEMENT_DETAIL_PICTURE_FILE_NAME] => 
+                )
+
+            [WF] => N
+            [SEARCHABLE_CONTENT] => 111111
+DMITRIY OPALEV
+СДЕЛКА: 111111
+2222
+3333
+2222|RUB
+            [ID] => 42
+            [IBLOCK_ID] => 18
+            [RESULT] => 1
+        )
+
+    [properties] => Array
+        (
+            [UF_DEAL] => Array
+                (
+                    [0] => 24
+                )
+
+            [UF_TYPE_WORK] => Array
+                (
+                    [0] => 2222
+                )
+
+            [UF_INN_CUSTOMER] => Array
+                (
+                    [0] => 3333
+                )
+
+            [UF_SUM] => Array
+                (
+                    [0] => 2222|RUB
+                )
+
+            [UF_CUSTOMER] => Array
+                (
+                    [0] => 
+                )
+
+            [UF_RESPONSIBLE] => Array
+                (
+                    [0] => 
+                )
+
+        )
+
+)
+
