@@ -13,7 +13,7 @@
  */
 use Bitrix\Main;
 use Bitrix\Main\Localization\Loc;
-Loc::loadMessages(__FILE__);
+Loc::loadLanguageFile($_SERVER["DOCUMENT_ROOT"]."/dlya-sotrudnikov/list-dopuska/index.php");
 
 class ListDopuskaTable extends Main\Entity\DataManager {
     private static $MODE = "test";
@@ -44,18 +44,10 @@ class ListDopuskaTable extends Main\Entity\DataManager {
 
     public static $accessRules = array(
         "all"       => "Предоставить",
-        "read"      => "Чтение",
-        "record"    => "Запись",
         "cancel"    => "Нет доступа",
     );
 
-    public static $result = array(
-        0   => "Новый",
-        10  => "На рассмотрении",
-        20  => "Согласовано",
-        80  => "Аннулирован",
-        90  => "Отклонено",
-    );
+    public static $result = array();
     public static $ERROR = array();
     public static $ACTION = "";
 
@@ -103,6 +95,19 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         self::$readonly = true;
         self::$Access = false;
 
+        self::$result = [
+            0  => Loc::getMessage("LIST_DOPUSKA_STATUS_NEW"),
+            10 => Loc::getMessage("LIST_DOPUSKA_STATUS_PROGRESS"),
+            20 => Loc::getMessage("LIST_DOPUSKA_STATUS_DONE"),
+            80 => Loc::getMessage("LIST_DOPUSKA_STATUS_CANCEL"),
+            90 => Loc::getMessage("LIST_DOPUSKA_STATUS_REJECT"),
+        ];
+
+        self::$accessRules = array(
+            "all"       => Loc::getMessage("LIST_DOPUSKA_ACCEPT"),
+            "cancel"    => Loc::getMessage("LIST_DOPUSKA_NO_ACCESS"),
+        );
+
         Bitrix\Main\Loader::includeModule('iblock');
         self::DirectoryAccess();
 
@@ -120,7 +125,6 @@ class ListDopuskaTable extends Main\Entity\DataManager {
             //Нажали кнопку "Согласовать"
             if( isset(self::$POST["matchingButton"]) ){
                 unset(self::$POST["matchingButton"]);
-                //addMatchingList($USER_ID) - вызывается с  идентификатором пользователя, кому даётся доступ.
 
                 $methodField = function(){
                     $ret = true;
@@ -128,36 +132,36 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                     //Проверяем заполненность поля Ф.И.О.
                     if( !isset(self::$POST["FIO"]) || empty(self::$POST["FIO"]) ){
                         $ret = false;
-                        self::$MESSAGE["FIO"] = "Укажите Ф.И.О сотрудника";
+                        self::$MESSAGE["FIO"] = Loc::getMessage("LIST_DOPUSKA_ERROR_FIO");
                     }
 
                     //Проверяем должность
                     if( !isset(self::$POST["Specialty"]) || empty(self::$POST["Specialty"]) ){
                         $ret = false;
-                        self::$MESSAGE["Specialty"] = "Укажите должность сотрудника";
+                        self::$MESSAGE["Specialty"] = Loc::getMessage("LIST_DOPUSKA_ERROR_SPECIALTY");
                     }
 
                     //Проверка адреса
                     if( !isset(self::$POST["workPlace"]) || empty(self::$POST["workPlace"]) ){
                         $ret = false;
-                        self::$MESSAGE["workPlace"] = "Укажите место работы (адрес, номер кабинета)";
+                        self::$MESSAGE["workPlace"] = Loc::getMessage("LIST_DOPUSKA_ERROR_WORKPLACE");
                     }
 
                     //Проверка номера телефона
                     if( !isset(self::$POST["employeePhoneNumber"]) || empty(self::$POST["employeePhoneNumber"]) ){
                         $ret = false;
-                        self::$MESSAGE["employeePhoneNumber"] = "Укажите номер телефона сотрудника";
+                        self::$MESSAGE["employeePhoneNumber"] = Loc::getMessage("LIST_DOPUSKA_ERROR_EMPLOYEE_PHONE");
                     }
 
-                    if( empty(self::$CHECK_IBLOCK) || self::$CHECK_IBLOCK==1 || self::$CHECK_IBLOCK==44){
-                        self::$MESSAGE["insertCompanyStructure"] = "Укажите подразделение, в котором работает сотрудник";
+                    if( empty(self::$CHECK_IBLOCK) ){
+                        self::$MESSAGE["insertCompanyStructure"] = Loc::getMessage("LIST_DOPUSKA_ERROR_DEPARTMENT");
                         $ret = false;
                     }
 
                     //Указываем, что поле комментария должно быть обязательным
                     foreach( self::$POST["user_other"] as $other_key => $other_val ){
                         if( empty($other_val) && isset(self::$POST["user_value"][$other_key]) && self::$POST["user_value"][$other_key] != "cancel" ){
-                            self::$MESSAGE["row_".$other_key] = "Комментарий в блоке `".self::$blockAccess["element"][$other_key]["NAME"]."` должен быть заполнен.";
+                            self::$MESSAGE["row_".$other_key] = Loc::getMessage("LIST_DOPUSKA_COMMENT_IN_BLOCK")." `".self::$blockAccess["element"][$other_key]["NAME"]."` ".Loc::getMessage("MUST_BE_FILLED");
                             $ret = false;
                         }
                     }
@@ -209,7 +213,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                     "MODIFIED_BY"    => $USER->GetID(),
                     "IBLOCK_SECTION_ID" => false, 
                     "IBLOCK_ID"      => self::$CONF[self::$MODE]["IBLOCK_ID"],/* идентификтор инфоблока */
-                    "NAME"           => "Согласование листа допуска ".self::$POST["FIO"] ." ". date("d.m.Y H:i:s"),
+                    "NAME"           => Loc::getMessage("LIST_DOPUSKA_BIZPROC_TITLE"). " ".self::$POST["FIO"] ." ". date("d.m.Y H:i:s"),
                     "ACTIVE"         => "Y", 
                     "PREVIEW_TEXT"   => self::$POST["COMMENT"],
                     "DETAIL_TEXT"    => $PROP_text,
@@ -270,14 +274,14 @@ class ListDopuskaTable extends Main\Entity\DataManager {
     public static function getTextListDopusk( $max_len=38 ){
         if(!CModule::IncludeModule('iblock')) die('error'); 
 
-        $PROP_text = "\r\nСотрудник: ".self::$POST["FIO"];
+        $PROP_text = "\r\n".Loc::getMessage("LIST_DOPUSKA_EMPLOYEE").": ".self::$POST["FIO"];
         if( isset(self::$POST["employeePhoneNumber"]) && !empty(self::$POST["employeePhoneNumber"]) ){
             $PROP_text .= " (".self::$POST["employeePhoneNumber"].")";
         }
         $PROP_text .= "\r\n";
         
         if( isset(self::$POST["Specialty"]) && !empty(self::$POST["Specialty"]) ){
-            $PROP_text .= "Должность: ".self::$POST["Specialty"]."\r\n";
+            $PROP_text .= Loc::getMessage("LIST_DOPUSKA_SPECIALTY").": ".self::$POST["Specialty"]."\r\n";
         }
 
         if( isset(self::$POST["COMMENT"]) && !empty(self::$POST["COMMENT"]) ){
@@ -291,7 +295,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         );
         $rs_section = CIBlockSection::GetList(array(), $arFilter)->Fetch();
         
-        $PROP_text .= "Подразделение: ".$rs_section["NAME"]."\r\n";
+        $PROP_text .= Loc::getMessage("LIST_DOPUSKA_DEPARTMENT").": ".$rs_section["NAME"]."\r\n";
         $PROP_text .= "Статус: ".self::$result[self::$FIELD_RESULT]."\r\n";
         $PROP_arr = array();
         $section = "";
@@ -324,8 +328,8 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         }
 
         $PROP_text.= "\r\n"
-                . "Подробнее: "
-                . "[url=/dlya-sotrudnikov/list-dopuska/blank-lista-dopuska.php?ID=".self::$ID."&ACTION=view]Просмотреть[/url].";
+                . Loc::getMessage("LIST_DOPUSKA_DETAILS"). ": "
+                . "[url=/dlya-sotrudnikov/list-dopuska/blank-lista-dopuska.php?ID=".self::$ID."&ACTION=view]".Loc::getMessage("LIST_DOPUSKA_VIEW")."[/url].";
 
         return $PROP_text;
     }
@@ -358,7 +362,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
             $DATE_DOPUSK = $matching["DATE_DOPUSK"]->format("d.m.Y");
         }
 
-        $HTML_text[] = "[p]Сотрудник: [b]".self::$POST["FIO"]."[/b]";
+        $HTML_text[] = "[p]".Loc::getMessage("LIST_DOPUSKA_EMPLOYEE").": [b]".self::$POST["FIO"]."[/b]";
 
         if( isset(self::$POST["employeePhoneNumber"]) && !empty(self::$POST["employeePhoneNumber"]) ){
             $HTML_text[] = " (".self::$POST["employeePhoneNumber"].")";
@@ -370,7 +374,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
 
         $HTML_text[] = "[/p]";
 
-        $HTML_text[] = "[p]Должность: [b]".self::$POST["Specialty"]."[/b][/p]";
+        $HTML_text[] = "[p]".Loc::getMessage("LIST_DOPUSKA_SPECIALTY").": [b]".self::$POST["Specialty"]."[/b][/p]";
 
         $arFilter = array(
             "IBLOCK_CODE"   => "departments",
@@ -380,10 +384,10 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         $rs_section = CIBlockSection::GetList(array(), $arFilter)->Fetch();
 
         if(isset(self::$POST["workPlace"]) && !empty(self::$POST["workPlace"]) ){
-            $HTML_text[] = "[p]Место работы (адрес, номер кабинета): [b]".self::$POST["workPlace"]."[/b][/p]";
+            $HTML_text[] = "[p]".Loc::getMessage("LIST_DOPUSKA_PLACE_WORK").": [b]".self::$POST["workPlace"]."[/b][/p]";
         }
-        $HTML_text[] = "[p]Подразделение: [b]".$rs_section["NAME"]."[/b][/p]";
-        $HTML_text[] = "[p]Статус: [b]".self::$result[self::$FIELD_RESULT]."[/b][/p]";
+        $HTML_text[] = "[p]".Loc::getMessage("LIST_DOPUSKA_DEPARTMENT").": [b]".$rs_section["NAME"]."[/b][/p]";
+        $HTML_text[] = "[p]".Loc::getMessage("LIST_DOPUSKA_TATUS").": [b]".self::$result[self::$FIELD_RESULT]."[/b][/p]";
         $section = "";
 
         $HTML_text[] = "[table]";
@@ -410,9 +414,9 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                 }
 
                 //Предыдущие пользовательские данные для сверки
-                $prev_user_value = " уже есть (".$DATE_DOPUSK.")";
+                $prev_user_value = " ".Loc::getMessage("LIST_DOPUSKA_ALREADY_AVAILABLE")." (".$DATE_DOPUSK.")";
                 if( ( isset( $matching["user_value"][$user_key] ) && $matching["user_value"][$user_key] == "cancel" || !isset( $matching["user_value"][$user_key] ) ) && $user_value != "cancel" ){
-                    $prev_user_value = " [b](Добавить)[/b] ";
+                    $prev_user_value = " [b](".Loc::getMessage("LIST_DOPUSKA_ADD").")[/b] ";
                 }
 
                 //Вывод выбранных значений
@@ -434,7 +438,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                         . "[td]"
                             . $td_str
                         . "[/td]"
-                        . "[td]Убрать доступ[/td]"
+                        . "[td]".Loc::getMessage("LIST_DOPUSKA_ADD")."[/td]"
                 . "[/tr]";
             }
         }
@@ -442,7 +446,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         if( !empty($Rem_HTML_text) ){
             $HTML_text[] = ""
             . "[tr]"
-                . "[th][b]Запретить доступ[/b][/th]"
+                . "[th][b]".Loc::getMessage("LIST_DOPUSKA_REMOVE_ACCESS")."[/b][/th]"
                 . "[th]"
                 . "[/th]"
             . "[/tr]". implode($Rem_HTML_text);
@@ -468,19 +472,12 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         self::domBlockAccess(true);
 
         $overrideTaskData = array_merge( array(
-            "TITLE"             => "Изменения по листу допуска на сотрудника: ".self::$POST["FIO"]." от ".date("d.m.Y"),
+            "TITLE"             => Loc::getMessage("LIST_DOPUSKA_TASK_TITLE").": ".self::$POST["FIO"]." от ".date("d.m.Y"),
             "DESCRIPTION"       => self::getHTMListDopusk(),
             "CREATED_BY"        => $user_id,
             "ALLOW_TIME_TRACKING"   => "Y",
             "ADD_IN_REPORT"     => "Y",
         ), $TaskData );
-
-        /*
-        if( isset(self::$groupAccess["it_director"][0]) ){
-            $user_id = self::$groupAccess["it_director"][0];
-            $overrideTaskData["CREATED_BY"] = $user_id;
-        }
-        */
 
         //По просьбе Милютина, договорились задачу по листу допуска ставить от имени робота 18.02.2019
         $user_id = 608;
@@ -521,15 +518,6 @@ class ListDopuskaTable extends Main\Entity\DataManager {
             }
 
         }
-
-        /*
-        //Получаем массив с наблюдателями для задачи
-        $viewers = array();
-        array_walk_recursive(self::$groupAccess, function( $item, $key ) use (&$viewers) {
-            $viewers[] = (int)$item;
-        } );
-        */
-
     }
 
 //    Проверка обязательных полей ($methodField - функция, которая проверяет на валидность)
@@ -578,9 +566,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
 
         $tr_str = '<thead><input type="hidden" name="ID" value="'.self::$ID.'"/></thead>'
             . '<thead class="text-center"';
-//        if( !$text_only ){
-            $tr_str .= ' id="t_body_header"';
-//        }
+        $tr_str .= ' id="t_body_header"';
 
         $FIO = "";
         if( isset(self::$POST["FIO"]) ){
@@ -621,45 +607,42 @@ class ListDopuskaTable extends Main\Entity\DataManager {
 
         $tr_str .= '>'
             . '<tr>'
-                . '<td colspan="5"><label for="FIO" class="label">Сотрудник:</label></td>'
+                . '<td colspan="3"><label for="FIO" class="label">'.Loc::getMessage("LIST_DOPUSKA_EMPLOYEE").':</label></td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5">'.$FIO_str.'</td>'
+                . '<td colspan="3">'.$FIO_str.'</td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5"><label for="Specialty" class="label">Должность сотрудника:</label></td>'
+                . '<td colspan="3"><label for="Specialty" class="label">'.Loc::getMessage("LIST_DOPUSKA_EMPLOYEE_POSITION").':</label></td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5">'.$Specialty_str.'</td>'
+                . '<td colspan="3">'.$Specialty_str.'</td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5"><label for="employeePhoneNumber" class="label">Телефон сотрудника:</label></td>'
+                . '<td colspan="3"><label for="employeePhoneNumber" class="label">'.Loc::getMessage("LIST_DOPUSKA_EMPLOYEE_POSITION").':</label></td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5">'.$employeePhoneNumber_str.'</td>'
+                . '<td colspan="3">'.$employeePhoneNumber_str.'</td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5"><label for="workPlace" class="label">Место работы (адрес, номер кабинета)</label></td>'
+                . '<td colspan="3"><label for="workPlace" class="label">'.Loc::getMessage("LIST_DOPUSKA_PLACE_WORK").'</label></td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5">'.$workPlace_str.'</td>'
+                . '<td colspan="3">'.$workPlace_str.'</td>'
             . '</tr>'
             . '<tr>'
-                . '<td colspan="5">Подразделение: '
+                . '<td colspan="3"><b>'.Loc::getMessage("LIST_DOPUSKA_DEPARTMENT").':</b>'
                     . '<div id="insertCompanyStructure"></div>'
                 . '</td>'
-//                . '<td colspan="5">'.self::$CompanyStructure->saveXML().'</td>'
             . '</tr>'
             . '<tr>'
-                . '<td>Статус: '.self::$result[self::$FIELD_RESULT].'</td>'
+                . '<td colspan="3"><b>'.Loc::getMessage("LIST_DOPUSKA_TATUS").'</b>: '.self::$result[self::$FIELD_RESULT].'</td>'
             . '</tr>';
         if(!$text_only){
             $tr_str.= '<tr>'
-                . '<th>Вид доступа</th>'
-                . '<th>Предоставить</th>'
-                . '<th>чтение</th>'
-                . '<th>запись</th>'
-                . '<th>Нет доступа</th>'
+                . '<th>'.Loc::getMessage("LIST_DOPUSKA_TYPE_ACCESS").'</th>'
+                . '<th>'.Loc::getMessage("LIST_DOPUSKA_ACCEPT").'</th>'
+                . '<th>'.Loc::getMessage("LIST_DOPUSKA_NO_ACCESS").'</th>'
             . '</tr>';
         }
 
@@ -706,8 +689,6 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                     } else {
                         $CompanyStructure->appendChild( $element_obj );
                     }
-//                        var_dump(self::$doc->saveHTML());
-//                        die();
 
                 }
 
@@ -728,7 +709,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
             $thead = self::$doc->createDocumentFragment();
             if($thead->appendXML('<thead id="section_'.$ar_section["ID"].'" class="depth_level'.$ar_section["DEPTH_LEVEL"].'">'
                 . '<tr>'
-                    . '<th colspan="5" class="text-center">'.$ar_section["NAME"].'</th>'
+                    . '<th colspan="3" class="text-center">'.$ar_section["NAME"].'</th>'
                 . '</tr>'
             . '</thead>')){
                 $list_catalog->appendChild($thead);
@@ -760,8 +741,6 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                 $tr = self::$doc->createDocumentFragment();
                 $checked    = array(
                     "all"       => "",
-                    "read"      => "",
-                    "record"    => "",
                     "cancel"    => "",
                 );
 
@@ -789,12 +768,6 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                         . '<input type="radio" value="all" '.$checked["all"].' name="user_value['.$ar_fields["ID"].']" id="all'.$ar_fields["ID"].'"/>'
                     . '</td>'
                     . '<td class="text-center">'
-                        . '<input type="radio" value="read" '.$checked["read"].' name="user_value['.$ar_fields["ID"].']" id="read'.$ar_fields["ID"].'"/>'
-                    . '</td>'
-                    . '<td class="text-center">'
-                        . '<input type="radio" value="record" '.$checked["record"].' name="user_value['.$ar_fields["ID"].']" id="record'.$ar_fields["ID"].'"/>'
-                    . '</td>'
-                    . '<td class="text-center">'
                         . '<input type="radio" value="cancel" '.$checked["cancel"].' name="user_value['.$ar_fields["ID"].']" id="cancel'.$ar_fields["ID"].'"/>'
                     . '</td>'
                 . '</tr>';
@@ -803,20 +776,12 @@ class ListDopuskaTable extends Main\Entity\DataManager {
 //                    if(empty($checked["cancel"])){
                         $tr_str = 
                         '<tr class="hover '.$CHECKED_LINE.'" '.$STYLE_BACKGROUND.'>'
-                            . '<td colspan="4"><div>'.$ar_fields["NAME"].'</div>'
+                            . '<td colspan="2"><div>'.$ar_fields["NAME"].'</div>'
                                 . $other
                             . '</td>'
                             . '<td class="text-center">';
                             if( !empty($checked["all"]) ){
                                 $tr_str.=self::$accessRules["all"];
-                            }
-
-                            if( !empty($checked["read"]) ){
-                                $tr_str.=self::$accessRules["read"];
-                            }
-
-                            if( !empty($checked["record"]) ){
-                                $tr_str.=self::$accessRules["record"];
                             }
 
                             if( !empty($checked["cancel"]) ){
@@ -887,30 +852,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
 
     //Определение привилегированных пользователей ($groupAccess должна содержать массив разрешённых пользователей)
     public static function defPrivilegedUsers($user_id = 0){
-
-//        if(!empty(self::$CHECK_IBLOCK)){
-//            var_dump( array_keys(CIntranetUtils::GetDepartmentManager(array(self::$CHECK_IBLOCK), false, true)) );
-//            die();
-//        }
-
-//        var_dump(in_array(0, self::$groupAccess["owner"]), true);
-        /*!!!
-        if( empty(self::$USER_TASK_ID) ){
-            self::$USER_TASK_ID = self::$USER->GetID();
-        }
-        */
-//        if(empty(self::$groupAccess["owner"])){
-//            self::$groupAccess["owner"]         = array($user_id); //владелец;
-
-//            if(!empty(self::$USER_TASK_ID)){
-                self::$groupAccess["owner"] = array(self::$USER_TASK_ID); //владелец;
-//            }
-//        }
-        /*
-        self::$USER_TASK_ID = self::$groupAccess["owner"][0];
-        !!!*/
-        
-//        self::$groupAccess[] = self::$USER->GetID(); //1 - владелец;
+        self::$groupAccess["owner"] = array(self::$USER_TASK_ID); //владелец;
         
         //Ищем начальника у текущего пользователя
         //https://bitrix.center-light.ru/company/vis_structure.php
@@ -1003,8 +945,6 @@ class ListDopuskaTable extends Main\Entity\DataManager {
         self::$CHECK_IBLOCK = $matching["CHECK_IBLOCK"];
         self::$REF_TASK = $matching["REF_TASK"];
 
-//        var_dump(self::$groupAccess);
-//        die();
 //        if( self::isAccess() ){
             
             self::$PARENT_ID = $matching["PARENT_ID"];
@@ -1019,7 +959,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
                 try {
                     self::$POST = json_decode($matching["POST_DATA_LIST"], true);
                 } catch (Exception $e) {
-                    self::$ERROR["POST_DATA_LIST"][] = "Невозможно преобразовать данные из строки в массив\r\n".$e->getMessage();
+                    self::$ERROR["POST_DATA_LIST"][] = Loc::getMessage("LIST_DOPUSKA_BLANK_TITLE")."\r\n".$e->getMessage();
                 }
                 self::postData();
             }
@@ -1030,7 +970,7 @@ class ListDopuskaTable extends Main\Entity\DataManager {
             try {
                 self::$HISRORY_RESULT = json_decode($matching["HISRORY_RESULT"], true);
             } catch (Exception $e) {
-                self::$ERROR["HISRORY_RESULT"][] = "Невозможно преобразовать данные из строки в массив\r\n".$e->getMessage();
+                self::$ERROR["HISRORY_RESULT"][] = Loc::getMessage("LIST_DOPUSKA_ERROR_POST_DATA_LIST")."\r\n".$e->getMessage();
             }
             
             if( $matching["RESULT"] == 0 ){
@@ -1042,16 +982,8 @@ class ListDopuskaTable extends Main\Entity\DataManager {
             $arr_val = array_values(self::$groupAccess);
             $access_user = array(1);
             if( in_array(self::$USER->GetID(), $access_user) && !in_array(self::$USER->GetID(), $arr_val)) {
-                    
-//                    !in_array($USER_TASK_ID, $arr_val) && $USER_TASK_ID == 1 ){
                 self::$groupAccess["owner"] = self::$USER->GetID();
             }
-            
-//            self::isAccess();
-//            
-//            var_dump(self::$groupAccess);
-//            die();
-        
     }
     
     //Получить флаг доступности документа

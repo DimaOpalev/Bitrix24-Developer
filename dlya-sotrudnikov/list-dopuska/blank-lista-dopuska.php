@@ -1,6 +1,9 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 use Bitrix\Main\Page\Asset;
+use Bitrix\Main\Localization\Loc;
+
+Loc::loadMessages(__FILE__);
 
 Asset::getInstance()->addCss('//cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
 
@@ -9,7 +12,7 @@ require_once("../assets/class/ListDopuskaClass.php");
 
 $TListDopuska = new ListDopuskaTable;
 
-$APPLICATION->SetTitle("Бланк листа допуска");
+$APPLICATION->SetTitle(Loc::getMessage("LIST_DOPUSKA_BLANK_TITLE"));
 
 
 Asset::getInstance()->addCss("/dlya-sotrudnikov/assets/css/list-dopuska.css");
@@ -43,10 +46,10 @@ if( isset($_GET["ACTION"]) && ($_GET["ACTION"]=="view" || $_GET["ACTION"]=="view
 	<div>
 		 <?
         if( !isset($_GET["ACTION"]) || $_GET["ACTION"]!="view" ){
-            ?> <button class="ui-btn ui-btn-primary" name="matchingButton">Сохранить</button>
+            ?> <button class="ui-btn ui-btn-primary" name="matchingButton"><?=Loc::getMessage("LIST_DOPUSKA_BUTTON_SAVE")?></button>
 		<?
         }
-        ?> <a class="ui-btn ui-btn-sm" href="../list-dopuska/">Назад</a>
+        ?> <a class="ui-btn ui-btn-sm" href="../list-dopuska/"><?=Loc::getMessage("LIST_DOPUSKA_BUTTON_BACK")?></a>
 	</div>
 </form>
 <script>
