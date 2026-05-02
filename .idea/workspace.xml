@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="77aeeed1-6409-4a4a-99d4-f5d66f6ab0d6" name="Changes" comment="home_work 5">
+      <change beforePath="$PROJECT_DIR$/local/activities/custom/helloworldactivity/lang/ru/helloworldactivity.php" beforeDir="false" afterPath="$PROJECT_DIR$/local/activities/custom/helloworldactivity/lang/ru/helloworldactivity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local/components/otus/timeman.integration/class.php" beforeDir="false" afterPath="$PROJECT_DIR$/local/components/otus/timeman.integration/class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local/php_interface/src/Otus/Diag/FileExceptionHanlderLogCustom.php" beforeDir="false" afterPath="$PROJECT_DIR$/local/php_interface/src/Otus/Diag/FileExceptionHanlderLogCustom.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/otus/debug.php" beforeDir="false" afterPath="$PROJECT_DIR$/otus/debug.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="232447" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/DimaOpalev/Bitrix24-Developer.git&quot;,
+    &quot;accountId&quot;: &quot;076655e8-dd26-40ab-b56e-49b50548fd6f&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="PhpServers">
+    <servers>
+      <server host="bitrix.localhost" id="72629c62-319b-4c24-91c8-6c47784e491d" name="Unnamed" />
+    </servers>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="387loTEELyFcEy1SmaHyry8338A" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;//wsl.localhost/Ubuntu/home/user/docker/otus/bitrix24-docker/www&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/local/components/otus/currency.rates/templates" />
+      <recent name="$PROJECT_DIR$/local/components/otus/currency.rates/templates/.default" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3bd3a6803838-JavaScript-PS-261.22158.283" />
+        <option value="bundled-php-predefined-a98d8de5180a-a9a4ea3ee0f4-com.jetbrains.php.sharedIndexes-PS-261.22158.283" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="77aeeed1-6409-4a4a-99d4-f5d66f6ab0d6" name="Changes" comment="" />
+      <created>1768158667260</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1768158667260</updated>
+      <workItem from="1768158668392" duration="437000" />
+      <workItem from="1768159289202" duration="181000" />
+      <workItem from="1768159484194" duration="1181000" />
+      <workItem from="1769449824839" duration="9695000" />
+      <workItem from="1769526136080" duration="955000" />
+      <workItem from="1771175841603" duration="691000" />
+      <workItem from="1771400880372" duration="537000" />
+      <workItem from="1775384975020" duration="2584000" />
+      <workItem from="1775398035031" duration="82000" />
+      <workItem from="1775398139402" duration="252000" />
+      <workItem from="1775399718316" duration="1868000" />
+    </task>
+    <task id="LOCAL-00001" summary="home_work 5">
+      <option name="closed" value="true" />
+      <created>1769450134891</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1769450134891</updated>
+    </task>
+    <task id="LOCAL-00002" summary="home_work 5">
+      <option name="closed" value="true" />
+      <created>1769526178398</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1769526178398</updated>
+    </task>
+    <task id="LOCAL-00003" summary="home_work 5">
+      <option name="closed" value="true" />
+      <created>1769526256836</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1769526256836</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="home_work 5" />
+    <option name="LAST_COMMIT_MESSAGE" value="home_work 5" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

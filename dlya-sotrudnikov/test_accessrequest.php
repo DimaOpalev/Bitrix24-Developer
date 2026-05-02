@@ -77,13 +77,22 @@ $total = $factory->getItemsCountFilteredByPermissions(
 );
 
 $result = [];
+$stages = $factory->getStages();
+$stageMap = [];
+
+foreach ($stages as $stage)
+{
+    $stageMap[$stage->getStatusId()] = $stage->getName();
+}
 
 foreach ($items as $item)
 {
+    $stageId = $item->getStageId();
     $result[] = [
         'ID' => $item->getId(),
         'TITLE' => $item->getTitle(),
-        'STAGE_ID' => $item->getStageId(),
+        'STAGE_ID' => $stageId,
+        'STATUS' => $stageMap[$stageId] ?? 'Неизвестный статус'
     ];
 }
 
