@@ -194,23 +194,30 @@ class AccessRequestFormComponent extends CBitrixComponent
         }
 
         // Если нажата кнопка "Отправить на согласование" — запускаем бизнес-процесс или создаём задачу
-        if (isset($post['SendMatching'])) {
+        if (isset($post['POST_DATA']['SendMatching'])) {
+            AddMessage2Log(
+                print_r([
+                    "requestId" => $requestId, 
+                    "post" => $post
+                ], true), 'accessrequest'
+            );
             $this->startApprovalProcess($requestId, $post);
         }
 
         LocalRedirect($this->arResult['BACK_URL']);
     }
 
-    protected function isOtherElement($elementId)
+    protected function isOtherElement(int $elementId): bool
     {
         $el = $this->arResult['ACCESS_ELEMENTS'][$elementId] ?? null;
         return $el && $el['CODE'] === 'other';
     }
 
 
-    protected function startApprovalProcess($requestId, $post)
+    protected function startApprovalProcess(int $requestId, array $post)
     {
-        
+        global $USER;
+
         $moduleId = COMPANY_ACCESSREQUEST_MODULE_ID;
         $smartProcessEntityTypeId = (int)\Bitrix\Main\Config\Option::get($moduleId, 'entity_type_id', 0);
         if ($smartProcessEntityTypeId <= 0) {
@@ -244,22 +251,23 @@ class AccessRequestFormComponent extends CBitrixComponent
 
         // Создаём элемент в смарт-процессе
         $item = $factory->createItem();
-        $item->setTitle(Loc::getMessage('TITLE_EMPLOYEE_ACCESS') . ': ' .  $post["POST_DATA"]['FIO']);
+        $item->setTitle(Loc::getMessage('TITLE_EMPLOYEE_ACCESS') . ': ' .  $post["POST_DATA"]['FIO'] ?? "");
 
         // Устанавливаем связь с заявкой
         $item->set($requestIdFieldName, $requestId);
-        $item->setStageId('NEW');
-        $saveResult = $item->save();
 
-        if (!$saveResult->isSuccess()) {
-            $errors = implode(', ', $saveResult->getErrorMessages());
+        $operation = $factory->getAddOperation($item);
+        $result = $operation->launch();
+
+        if (!$result->isSuccess()) {
+            $errors = implode(', ', $result->getErrorMessages());
             $this->arResult['ERRORS']['smart_process'] = Loc::getMessage('ERROR_CREATING_SMART_PROCESS').': ' . $errors;
             return;
         }
 
-        $smartProcessId = $item->getId();
+        $smartProcessId = (int)$item->getId();
         // Обновляем запись в таблице access_request, связывая с элементом смарт-процесса
-        AccessRequestTable::update($requestId, [
+        $updateResult = AccessRequestTable::update($requestId, [
             'REF_SMART_PROCESS_ID' => $smartProcessId,
             'STATUS' => AccessRequestTable::STATUS_REVIEW, // 10 - На рассмотрении
         ]);

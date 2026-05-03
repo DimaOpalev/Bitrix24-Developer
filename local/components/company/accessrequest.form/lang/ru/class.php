@@ -14,6 +14,7 @@ $MESS['SAVE_BUTTON'] = 'Сохранить';
 $MESS['SEND_BUTTON'] = 'Отправить на согласование';
 $MESS['BACK_BUTTON'] = 'Назад';
 
+$MESS['REQUEST_SENT'] = "Заявка отправлена на согласование";
 
 $MESS['ERROR_FIO'] = 'Укажите ФИО сотрудника';
 $MESS['ERROR_SPECIALTY'] = 'Укажите должность';
