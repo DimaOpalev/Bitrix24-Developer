@@ -15,6 +15,8 @@ class AccessRequestListComponent extends CBitrixComponent
 
     public function onPrepareComponentParams($arParams)
     {
+        $arParams['ADD_BUTTON_URL'] = trim($arParams['ADD_BUTTON_URL'] ?? '/item/');
+        $arParams['ITEM_URL'] = trim($arParams['ITEM_URL'] ?? '/item/?ID=#ID#');
         return $arParams;
     }
 
@@ -80,6 +82,10 @@ class AccessRequestListComponent extends CBitrixComponent
         $this->arResult['SORT'] = $sort['sort'];
         $this->arResult['SORT_VARS'] = $sort['vars'];
         $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
+
+        $this->arResult['ADD_BUTTON_URL'] = $this->arParams['ADD_BUTTON_URL'];
+        $this->arResult['ADD_REQUEST_BUTTON_TEXT'] = Loc::getMessage('ADD_REQUEST_BUTTON');
+        $this->arResult['ITEM_URL'] = $this->arParams['ITEM_URL'];
 
         $this->includeComponentTemplate();
     }
@@ -152,10 +158,12 @@ class AccessRequestListComponent extends CBitrixComponent
 
     protected function getRowActions($row)
     {
+        $itemUrl = str_replace('#ID#', $row['ID'], $this->arParams['ITEM_URL']);
+
         return [
             [
                 'text' => Loc::getMessage('ACTION_OPEN'),
-                'onclick' => "window.location.href='./blank-lista-dopuska.php?ID=" . $row['ID'] . "'",
+                'onclick' => "window.location.href='" . CUtil::JSEscape($itemUrl) . "'",
                 'default' => true,
             ],
         ];

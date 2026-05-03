@@ -13,3 +13,5 @@ $MESS['FILTER_STATUS'] = 'Статус';
 
 $MESS['ACTION_OPEN'] = 'Открыть';
 $MESS['ACTION_EDIT'] = 'Редактировать';
+
+$MESS['ADD_REQUEST_BUTTON'] = 'Новый лист допуска';

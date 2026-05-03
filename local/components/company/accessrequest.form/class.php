@@ -15,9 +15,15 @@ class AccessRequestFormComponent extends CBitrixComponent
     {
         $arParams['ID'] = (int)($arParams['ID'] ?? $_GET['ID'] ?? 0);
         $arParams['ACTION'] = $arParams['ACTION'] ?? $_GET['ACTION'] ?? 'new';
+        $arParams['BACK_URL'] = $arParams['BACK_URL'] ?? '../';
+        
         return $arParams;
     }
 
+    /**
+     * Точка входа в компонент
+     * 
+     */
     public function executeComponent()
     {
         Loader::includeModule('company.accessrequest');
@@ -53,6 +59,8 @@ class AccessRequestFormComponent extends CBitrixComponent
             'cancel' => Loc::getMessage('ACCESS_DENY'),
         ];
         $this->arResult['CURRENT_STATUS'] = $this->arResult['REQUEST']['STATUS'] ?? AccessRequestTable::STATUS_NEW;
+
+        $this->arResult['BACK_URL'] = $this->arParams['BACK_URL'];
 
         $this->includeComponentTemplate();
     }
@@ -96,7 +104,7 @@ class AccessRequestFormComponent extends CBitrixComponent
     {
         $request = AccessRequestTable::getById($id)->fetch();
         if (!$request) {
-            LocalRedirect('/company/access_requests/');
+            LocalRedirect($this->arParams['BACK_URL']);
         }
 
         // Декодируем список доступов
@@ -190,7 +198,7 @@ class AccessRequestFormComponent extends CBitrixComponent
             $this->startApprovalProcess($requestId, $post);
         }
 
-        LocalRedirect('./');
+        LocalRedirect($this->arResult['BACK_URL']);
     }
 
     protected function isOtherElement($elementId)
@@ -202,8 +210,72 @@ class AccessRequestFormComponent extends CBitrixComponent
 
     protected function startApprovalProcess($requestId, $post)
     {
+        
+        $moduleId = COMPANY_ACCESSREQUEST_MODULE_ID;
+        $smartProcessEntityTypeId = (int)\Bitrix\Main\Config\Option::get($moduleId, 'entity_type_id', 0);
+        if ($smartProcessEntityTypeId <= 0) {
+            $this->arResult['ERRORS']['smart_process'] = Loc::getMessage('SMART_PROCESS_ID_NOT_SPECIFIED');
+            //'Не указан ID смарт-процесса. Обратитесь к администратору.';
+            return;
+        }
+        
+        // Получаем имя поля для хранения ID заявки
+        $requestIdFieldName = \Bitrix\Main\Config\Option::get($moduleId, 'request_id_field_name', '');
+        if (empty($requestIdFieldName)) {
+            $this->arResult['ERRORS']['field_name'] = Loc::getMessage('ERROR_FIELD_NOT_SET'). " request_id_field_name";
+            //'Поле не задано';
+            return;
+        }
+
+        // Подключаем модуль CRM
+        if (!\Bitrix\Main\Loader::includeModule('crm')) {
+            $this->arResult['ERRORS']['crm'] = Loc::getMessage('ERROR_CRM_MODULE_NOT_CONNECTED');
+            //'Модуль CRM не доступен';
+            return;
+        }
+
+        // Получаем фабрику для смарт-процесса
+        $factory = \Bitrix\Crm\Service\Container::getInstance()->getFactory($smartProcessEntityTypeId);
+        if (!$factory) {
+            $this->arResult['ERRORS']['smart_process'] = Loc::getMessage('ERROR_SMART_PROCESS_NOT_FOUND');
+            //'Смарт-процесс не найден';
+            return;
+        }
+
+        // Создаём элемент в смарт-процессе
+        $item = $factory->createItem();
+        $item->setTitle(Loc::getMessage('TITLE_EMPLOYEE_ACCESS') . ': ' .  $post["POST_DATA"]['FIO']);
+
+        // Устанавливаем связь с заявкой
+        $item->set($requestIdFieldName, $requestId);
+        $item->setStageId('NEW');
+        $saveResult = $item->save();
+
+        if (!$saveResult->isSuccess()) {
+            $errors = implode(', ', $saveResult->getErrorMessages());
+            $this->arResult['ERRORS']['smart_process'] = Loc::getMessage('ERROR_CREATING_SMART_PROCESS').': ' . $errors;
+            return;
+        }
+
+        $smartProcessId = $item->getId();
+        // Обновляем запись в таблице access_request, связывая с элементом смарт-процесса
+        AccessRequestTable::update($requestId, [
+            'REF_SMART_PROCESS_ID' => $smartProcessId,
+            'STATUS' => AccessRequestTable::STATUS_REVIEW, // 10 - На рассмотрении
+        ]);
+
+        // Добавляем запись в историю
+        AccessRequestHistoryTable::add([
+            'REF_REQUEST' => $requestId,
+            'USER_DECISION_MAKER' => $GLOBALS['USER']->GetID(),
+            'STATUS' => AccessRequestTable::STATUS_REVIEW,
+            'COMMENT' => Loc::getMessage('REQUEST_SENT'),
+        ]);
+        
+        return $smartProcessId;
         // Здесь логика запуска бизнес-процесса или создания задачи
         // Например, создаём запись в истории
+        /*
         AccessRequestHistoryTable::add([
             'REF_REQUEST' => $requestId,
             'USER_DECISION_MAKER' => $GLOBALS['USER']->GetID(),
@@ -213,7 +285,7 @@ class AccessRequestFormComponent extends CBitrixComponent
 
         // Обновляем статус заявки
         AccessRequestTable::update($requestId, ['STATUS' => AccessRequestTable::STATUS_REVIEW]);
-
+        */
         // TODO: здесь можно запустить реальный бизнес-процесс или поставить задачу руководителю
         // Например, через CTaskItem::add, или через запуск БП методом CBPDocument::StartWorkflow
     }
