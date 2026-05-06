@@ -18,98 +18,133 @@ if (!empty($arResult['ERRORS'])) {
 }
 
 ?>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <form method="post" id="access-request-form">
+                <?= bitrix_sessid_post() ?>
+                <input type="hidden" name="ID" value="<?= $arResult['REQUEST']['ID'] ?? 0 ?>">
+                <h4 class="text-center">Лист допуска на сотрудника</h3>
+                <table class="table" style="max-width:800px; width:100%;">
+                    <tr>
+                        <td colspan="3"><label for="FIO"><?= Loc::getMessage('FIELD_EMPLOYEE') ?>:</label></td>
+                    </tr>
+                    <tr <?=isset($arResult["ERRORS"]["FIO"]) ? "class='table-danger'":""?>>
+                        <td colspan="3">
+                            <input type="text" name="FIO" id="FIO" value="<?= htmlspecialcharsbx($arResult["POST_DATA"]['FIO']) ?>" 
+                                <?= $arResult['READONLY'] ? 'readonly' : '' ?> class="form-control ">
+                        </td>
+                    </tr>
+                    <tr <?=isset($arResult["ERRORS"]["insertCompanyStructure"]) ? "class='table-danger'":""?>>
+                        <td colspan="3"><b><?= Loc::getMessage('FIELD_DEPARTMENT') ?>:</b>
+                            <div id="insertCompanyStructure"></div>
+                            <!-- Скрытое поле для хранения ID отдела -->
+                            <input type="hidden" name="REF_DEPARTMENT" id="REF_DEPARTMENT" value="<?= (int)$arResult["POST_DATA"]['REF_DEPARTMENT'] ?>">
 
-<form method="post" id="access-request-form">
-    <?= bitrix_sessid_post() ?>
-    <input type="hidden" name="ID" value="<?= $arResult['REQUEST']['ID'] ?? 0 ?>">
-    <h4>Лист допуска на сотрудника</h3>
-    <table class="table" style="max-width:800px; width:100%;">
-        <tr>
-            <td colspan="3"><label for="FIO"><?= Loc::getMessage('FIELD_EMPLOYEE') ?>:</label></td>
-        </tr>
-        <tr <?=isset($arResult["ERRORS"]["FIO"]) ? "class='table-danger'":""?>>
-            <td colspan="3">
-                <input type="text" name="FIO" id="FIO" value="<?= htmlspecialcharsbx($arResult["POST_DATA"]['FIO']) ?>" 
-                       <?= $arResult['READONLY'] ? 'readonly' : '' ?> class="form-control ">
-            </td>
-        </tr>
-        <tr <?=isset($arResult["ERRORS"]["insertCompanyStructure"]) ? "class='table-danger'":""?>>
-            <td colspan="3"><b><?= Loc::getMessage('FIELD_DEPARTMENT') ?>:</b>
-                <div id="insertCompanyStructure"></div>
-                <!-- Скрытое поле для хранения ID отдела -->
-                <input type="hidden" name="REF_DEPARTMENT" id="REF_DEPARTMENT" value="<?= (int)$arResult["POST_DATA"]['REF_DEPARTMENT'] ?>">
-
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <b><?= Loc::getMessage('FIELD_STATUS') ?>:</b> <?= $arResult['STATUS_LIST'][$arResult['CURRENT_STATUS']] ?>
-            </td>
-        </tr>
-        <tr class="text-center">
-            <th><?= Loc::getMessage('TYPE_ACCESS') ?></th>
-            <th><?= Loc::getMessage('ACCESS_ALLOW') ?></th>
-            <th><?= Loc::getMessage('ACCESS_DENY') ?></th>
-        </tr>
-        
-        <?php
-        // Вывод секций и элементов доступа
-        $currentSection = 0;
-        foreach ($arResult['ACCESS_ELEMENTS'] as $element) {
-            $sectionId = (int)$element['IBLOCK_SECTION_ID'];
-            if ($currentSection !== $sectionId) {
-                $sectionName = $arResult['ACCESS_SECTIONS'][$sectionId]['NAME'];
-                ?>
-                    <tr><th colspan="3" class="text-center"><?=$sectionName?></th></tr>
-                <?php
-                $currentSection = $sectionId;
-            }
-            $checkedAllow = '';
-            $checkedDeny = 'checked="checked"';
-            $otherValue = '';
-            
-            if(isset($arResult['POST_DATA']['user_value'][$element['ID']])) {
-                if ($arResult['POST_DATA']['user_value'][$element['ID']] == 'all') {
-                    $checkedAllow = 'checked="checked"';
-                    $checkedDeny = '';
-                }
-            }
-            
-            if (isset($arResult['POST_DATA']['user_other'][$element['ID']])) {
-                $otherValue = htmlspecialcharsbx($arResult['POST_DATA']['user_other'][$element['ID']]);
-            }
-        
-            $isOther = ($element['CODE'] == 'other');
-            $row_class_error = "";
-            if(isset($arResult["ERRORS"]["row_".$element['ID']])) {
-                $row_class_error = "class='table-danger'";
-            }
-            ?>
-            <tr id="row_<?= $element['ID'] ?>" <?=$row_class_error?>>
-                <td>
-                    <?= $element['NAME'] ?>
-                    <?php if ($isOther): ?>
-                        <textarea name="user_other[<?= $element['ID'] ?>]" class="other form-control" rows="2" <?= $arResult['READONLY'] ? 'readonly' : '' ?>><?= $otherValue ?></textarea>
-                    <?php endif; ?>
-                </td>
-                <td class="text-center">
-                    <input type="radio" name="user_value[<?= $element['ID'] ?>]" value="all" <?= $checkedAllow ?> <?= $arResult['READONLY'] ? 'disabled' : '' ?>>
-                </td>
-                <td class="text-center">
-                    <input type="radio" name="user_value[<?= $element['ID'] ?>]" value="cancel" <?= $checkedDeny ?> <?= $arResult['READONLY'] ? 'disabled' : '' ?>>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <b><?= Loc::getMessage('FIELD_STATUS') ?>:</b> <?= $arResult['STATUS_LIST'][$arResult['CURRENT_STATUS']] ?>
+                        </td>
+                    </tr>
+                    <tr class="text-center">
+                        <th><?= Loc::getMessage('TYPE_ACCESS') ?></th>
+                        <th><?= Loc::getMessage('ACCESS_ALLOW') ?></th>
+                        <th><?= Loc::getMessage('ACCESS_DENY') ?></th>
+                    </tr>
+                    
+                    <?php
+                    // Вывод секций и элементов доступа
+                    $currentSection = 0;
+                    foreach ($arResult['ACCESS_ELEMENTS'] as $element) {
+                        $sectionId = (int)$element['IBLOCK_SECTION_ID'];
+                        if ($currentSection !== $sectionId) {
+                            $sectionName = $arResult['ACCESS_SECTIONS'][$sectionId]['NAME'];
+                            ?>
+                                <tr><th colspan="3" class="text-center"><?=$sectionName?></th></tr>
+                            <?php
+                            $currentSection = $sectionId;
+                        }
+                        $checkedAllow = '';
+                        $checkedDeny = 'checked="checked"';
+                        $otherValue = '';
+                        
+                        if(isset($arResult['POST_DATA']['user_value'][$element['ID']])) {
+                            if ($arResult['POST_DATA']['user_value'][$element['ID']] == 'all') {
+                                $checkedAllow = 'checked="checked"';
+                                $checkedDeny = '';
+                            }
+                        }
+                        
+                        if (isset($arResult['POST_DATA']['user_other'][$element['ID']])) {
+                            $otherValue = htmlspecialcharsbx($arResult['POST_DATA']['user_other'][$element['ID']]);
+                        }
+                    
+                        $isOther = ($element['CODE'] == 'other');
+                        $row_class_error = "";
+                        if(isset($arResult["ERRORS"]["row_".$element['ID']])) {
+                            $row_class_error = "class='table-danger'";
+                        }
+                        ?>
+                        <tr id="row_<?= $element['ID'] ?>" <?=$row_class_error?>>
+                            <td>
+                                <?= $element['NAME'] ?>
+                                <?php if ($isOther): ?>
+                                    <textarea name="user_other[<?= $element['ID'] ?>]" class="other form-control" rows="2" <?= $arResult['READONLY'] ? 'readonly' : '' ?>><?= $otherValue ?></textarea>
+                                <?php endif; ?>
+                            </td>
+                            <td class="text-center">
+                                <input type="radio" name="user_value[<?= $element['ID'] ?>]" value="all" <?= $checkedAllow ?> <?= $arResult['READONLY'] ? 'disabled' : '' ?>>
+                            </td>
+                            <td class="text-center">
+                                <input type="radio" name="user_value[<?= $element['ID'] ?>]" value="cancel" <?= $checkedDeny ?> <?= $arResult['READONLY'] ? 'disabled' : '' ?>>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                </table>
+                
+                <?php if (!$arResult['READONLY']): ?>
+                    <button class="ui-btn ui-btn-primary" name="matchingButton"><?= Loc::getMessage('SAVE_BUTTON') ?></button>
+                    <button class="ui-btn ui-btn-success" name="SendMatching"><?= Loc::getMessage('SEND_BUTTON') ?></button>
+                <?php endif; ?>
+                <a class="ui-btn ui-btn-sm" href="<?= $arResult['BACK_URL'] ?>"><?= Loc::getMessage('BACK_BUTTON') ?></a>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <h4 class="text-center">История согласования</h4>
             <?php
-        }
-        ?>
-    </table>
-    
-    <?php if (!$arResult['READONLY']): ?>
-        <button class="ui-btn ui-btn-primary" name="matchingButton"><?= Loc::getMessage('SAVE_BUTTON') ?></button>
-        <button class="ui-btn ui-btn-success" name="SendMatching"><?= Loc::getMessage('SEND_BUTTON') ?></button>
-    <?php endif; ?>
-    <a class="ui-btn ui-btn-sm" href="<?= $arResult['BACK_URL'] ?>"><?= Loc::getMessage('BACK_BUTTON') ?></a>
-</form>
+                /*
+                $APPLICATION->IncludeComponent(
+                    'bitrix:main.ui.grid',
+                    '',
+                    [
+                        'GRID_ID' => $arResult['GRID_ID'],
+                        'COLUMNS' => $arResult['COLUMNS'],
+                        'ROWS' => $arResult['ROWS'],
+                        'NAV_OBJECT' => $arResult['NAV_OBJECT'],
+                        'TOTAL_ROWS_COUNT' => $arResult['TOTAL_ROWS_COUNT'],
+                        'SHOW_PAGESIZE' => true,
+                        'SHOW_ROW_CHECKBOXES' => false,
+                        'SHOW_CHECK_ALL_CHECKBOXES' => false,
+                        'SHOW_SELECTED_COUNTER' => false,
+                        'SHOW_ACTION_PANEL' => true,
+                        'ACTION_PANEL' => [],
+                        'FILTER' => $arResult['FILTERS'],
+                        'FILTER_ID' => $arResult['FILTER_ID'],
+                        'SHOW_NAVIGATION_PANEL' => true,
+                        'ENABLE_COLLAPSIBLE_ROWS' => false,
+                        'SORT' => $arResult['SORT'],
+                        'SORT_VARS' => $arResult['SORT_VARS'],
+                    ]
+                );
+                */
+            ?>
+        </div>
+    </div>
+</div>
 <script>
     BX.ready(function() {
         // Загружаем модуль лениво

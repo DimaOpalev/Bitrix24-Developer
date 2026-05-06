@@ -9,6 +9,7 @@ use Bitrix\Main\ORM\Fields\DatetimeField;
 use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\Type\DateTime;
+use Bitrix\Main\UserTable;
 
 class AccessRequestHistoryTable extends DataManager
 {
@@ -34,6 +35,11 @@ class AccessRequestHistoryTable extends DataManager
             (new TextField('COMMENT')),
             (new Reference('REQUEST', __NAMESPACE__ . '\AccessRequestTable', Join::on('this.REF_REQUEST', 'ref.ID')))
                 ->configureJoinType('INNER'),
+            (new Reference(
+                'USER',
+                UserTable::class,
+                Join::on('this.USER_DECISION_MAKER', 'ref.ID')
+            ))->configureJoinType('LEFT'),
         ];
     }
 }

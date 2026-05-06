@@ -11,12 +11,14 @@ use Bitrix\Main\Context;
 
 class AccessRequestFormComponent extends CBitrixComponent
 {
+    protected $gridId = 'access_request_form_grid';
+    protected $filterId = 'access_request_form_filter';
+
     public function onPrepareComponentParams($arParams)
     {
         $arParams['ID'] = (int)($arParams['ID'] ?? $_GET['ID'] ?? 0);
         $arParams['ACTION'] = $arParams['ACTION'] ?? $_GET['ACTION'] ?? 'new';
         $arParams['BACK_URL'] = $arParams['BACK_URL'] ?? '../';
-        
         return $arParams;
     }
 
@@ -32,11 +34,12 @@ class AccessRequestFormComponent extends CBitrixComponent
         CJSCore::Init(array('jquery3'));
 
         global $USER;
-        $this->arResult['USER_ID'] = $USER->GetID();
-        $this->arResult['IS_ADMIN'] = $USER->IsAdmin();
 
         // Загружаем справочник доступов (инфоблок list_dopuska)
-        $this->loadAccessDirectory();
+        $this->arResult = AccessRequestTable::loadAccessDirectory();
+
+        $this->arResult['USER_ID'] = $USER->GetID();
+        $this->arResult['IS_ADMIN'] = $USER->IsAdmin();
 
         // Если редактируем существующую заявку
         if ($this->arParams['ID'] > 0) {
@@ -65,6 +68,7 @@ class AccessRequestFormComponent extends CBitrixComponent
         $this->includeComponentTemplate();
     }
 
+    /*
     protected function loadAccessDirectory()
     {
         // Получаем структуру из инфоблока "list_dopuska"
@@ -99,6 +103,7 @@ class AccessRequestFormComponent extends CBitrixComponent
         $this->arResult['ACCESS_ELEMENTS'] = $elements;
 
     }
+    */
 
     protected function loadRequestData($id)
     {
