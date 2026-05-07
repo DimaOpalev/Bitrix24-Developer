@@ -1,0 +1,7 @@
+<?php
+$MESS['VENDOR_CALENDAR_RESPONSIBLE_SETTINGS_TAB'] = 'Основные настройки';
+$MESS['VENDOR_CALENDAR_RESPONSIBLE_RESPONSIBLE_USER'] = 'Ответственный сотрудник';
+$MESS['VENDOR_CALENDAR_RESPONSIBLE_SELECT_USER'] = 'Выберите пользователя...';
+$MESS['VENDOR_CALENDAR_RESPONSIBLE_SAVED'] = 'Настройки успешно сохранены.';
+$MESS['VENDOR_CALENDAR_RESPONSIBLE_SAVE_BTN'] = 'Сохранить';
+$MESS['VENDOR_CALENDAR_RESPONSIBLE_CALENDAR_ID'] = 'ID календаря (переговорной)';

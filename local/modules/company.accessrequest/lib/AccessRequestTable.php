@@ -21,6 +21,15 @@ class AccessRequestTable extends DataManager
     public const STATUS_CANCELLED  = 80;
     public const STATUS_REJECTED   = 90;
 
+    public const BADGE_STATUS = [
+        self::STATUS_NEW => "text-bg-light",
+        self::STATUS_REVIEW => "text-bg-warning",
+        self::STATUS_APPROVED => "text-bg-success",
+        self::STATUS_COMPLETED => "text-bg-success",
+        self::STATUS_CANCELLED => "text-bg-danger",
+        self::STATUS_REJECTED => "text-bg-danger",
+    ];
+
     public static function getTableName()
     {
         return 'access_request';
@@ -213,7 +222,7 @@ class AccessRequestTable extends DataManager
         }
     }
 
-    public function getUserName(int $userId=0)
+    public static function getUserName(int $userId=0)
     {
         $user = \Bitrix\Main\UserTable::getList([
             'select' => ['NAME', 'LAST_NAME', 'LOGIN'],

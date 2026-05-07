@@ -49,13 +49,14 @@ class AccessRequestListComponent extends CBitrixComponent
         ]);
 
         $rows = [];
+
         while ($row = $list->fetch()) {
             $rows[] = [
                 'data' => $row,
                 'columns' => [
                     'ID' => $row['ID'],
                     'EMPLOYEE_NAME' => $row['EMPLOYEE_NAME'],
-                    'STATUS' => AccessRequestTable::getStatusName($row['STATUS']),
+                    'STATUS' => '<span class="badge '.AccessRequestTable::BADGE_STATUS[$row['STATUS']].'">'.AccessRequestTable::getStatusName($row['STATUS']).'</span>',
                     'CREATED_DATE' => $row['CREATED_DATE'] ? $row['CREATED_DATE']->toString() : '',
                     'REF_CREATE_USER' => $this->getUserName($row['REF_CREATE_USER']),
                     'REF_TASK' => $row['REF_TASK'] ? '<a href="/company/personal/user/' . $row['REF_TASK'] . '/tasks/task/view/' . $row['REF_TASK'] . '/">Задача #' . $row['REF_TASK'] . '</a>' : '',

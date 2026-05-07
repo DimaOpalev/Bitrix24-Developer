@@ -18,14 +18,14 @@ if (!empty($arResult['ERRORS'])) {
 }
 
 ?>
-<div class="container">
+<div class="container my-5">
     <div class="row">
         <div class="col-lg-6">
             <form method="post" id="access-request-form">
                 <?= bitrix_sessid_post() ?>
                 <input type="hidden" name="ID" value="<?= $arResult['REQUEST']['ID'] ?? 0 ?>">
                 <h4 class="text-center">Лист допуска на сотрудника</h3>
-                <table class="table" style="max-width:800px; width:100%;">
+                <table class="table">
                     <tr>
                         <td colspan="3"><label for="FIO"><?= Loc::getMessage('FIELD_EMPLOYEE') ?>:</label></td>
                     </tr>
@@ -113,36 +113,32 @@ if (!empty($arResult['ERRORS'])) {
                 <a class="ui-btn ui-btn-sm" href="<?= $arResult['BACK_URL'] ?>"><?= Loc::getMessage('BACK_BUTTON') ?></a>
             </form>
         </div>
-        <div class="col-lg-6">
-            <h4 class="text-center">История согласования</h4>
-            <?php
-                /*
-                $APPLICATION->IncludeComponent(
-                    'bitrix:main.ui.grid',
-                    '',
-                    [
-                        'GRID_ID' => $arResult['GRID_ID'],
-                        'COLUMNS' => $arResult['COLUMNS'],
-                        'ROWS' => $arResult['ROWS'],
-                        'NAV_OBJECT' => $arResult['NAV_OBJECT'],
-                        'TOTAL_ROWS_COUNT' => $arResult['TOTAL_ROWS_COUNT'],
-                        'SHOW_PAGESIZE' => true,
-                        'SHOW_ROW_CHECKBOXES' => false,
-                        'SHOW_CHECK_ALL_CHECKBOXES' => false,
-                        'SHOW_SELECTED_COUNTER' => false,
-                        'SHOW_ACTION_PANEL' => true,
-                        'ACTION_PANEL' => [],
-                        'FILTER' => $arResult['FILTERS'],
-                        'FILTER_ID' => $arResult['FILTER_ID'],
-                        'SHOW_NAVIGATION_PANEL' => true,
-                        'ENABLE_COLLAPSIBLE_ROWS' => false,
-                        'SORT' => $arResult['SORT'],
-                        'SORT_VARS' => $arResult['SORT_VARS'],
-                    ]
-                );
-                */
-            ?>
-        </div>
+        <?php
+        if($arParams['ID']) {
+        ?>
+            <div class="col-lg-6">
+                <h4 class="text-center">История согласования</h4>
+                <?php
+                    $APPLICATION->IncludeComponent(
+                        'bitrix:main.ui.grid',
+                        '',
+                        [
+                            'GRID_ID' => "AccessRequestHistrory",
+                            'COLUMNS' => $arResult['COLUMNS'],
+                            'ROWS' => $arResult['ROWS'],
+                            'NAV_OBJECT' => $arResult['NAV_OBJECT'],
+                            'TOTAL_ROWS_COUNT' => $arResult['TOTAL_ROWS_COUNT'],
+                            'SHOW_PAGESIZE' => true,
+                            'AJAX_MODE' => 'Y',
+                            'AJAX_OPTION_JUMP' => 'N',
+                            'AJAX_OPTION_HISTORY' => 'N',
+                        ]
+                    );
+                ?>
+            </div>
+        <?php
+        }
+        ?>
     </div>
 </div>
 <script>

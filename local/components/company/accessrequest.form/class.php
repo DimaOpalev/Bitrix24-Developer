@@ -7,6 +7,8 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Type\DateTime;
 use Company\AccessRequest\AccessRequestTable;
 use Company\AccessRequest\AccessRequestHistoryTable;
+use Bitrix\Main\Grid\Options;
+use Bitrix\Main\UI\Filter\Options as FilterOptions;
 use Bitrix\Main\Context;
 
 class AccessRequestFormComponent extends CBitrixComponent
@@ -41,6 +43,7 @@ class AccessRequestFormComponent extends CBitrixComponent
         $this->arResult['USER_ID'] = $USER->GetID();
         $this->arResult['IS_ADMIN'] = $USER->IsAdmin();
 
+        $this->arResult['ID'] = $this->arParams['ID'];
         // Если редактируем существующую заявку
         if ($this->arParams['ID'] > 0) {
             $this->loadRequestData($this->arParams['ID']);
@@ -65,7 +68,53 @@ class AccessRequestFormComponent extends CBitrixComponent
 
         $this->arResult['BACK_URL'] = $this->arParams['BACK_URL'];
 
+        /**
+         * Подготовка грида gridAccessRequestHistrory
+         */
+        $this->gridAccessRequestHistrory();
+
+
+
+
         $this->includeComponentTemplate();
+    }
+
+    protected function applyAccessFilter($filter)
+    {
+        global $USER;
+        if ($USER->IsAdmin()) {
+            return $filter;
+        }
+        if ($USER->CanDoOperation('company.accessrequest_view_all_requests')) {
+            return $filter;
+        }
+        if ($USER->CanDoOperation('company.accessrequest_view_department_requests')) {
+            $userDepartments = \Bitrix\Main\UserTable::getList([
+                'select' => ['UF_DEPARTMENT'],
+                'filter' => ['=ID' => $USER->GetID()],
+            ])->fetch();
+            if ($userDepartments && !empty($userDepartments['UF_DEPARTMENT'])) {
+                $filter['=REF_DEPARTMENT'] = $userDepartments['UF_DEPARTMENT'];
+            }
+            return $filter;
+        }
+        $filter['=REF_CREATE_USER'] = $USER->GetID();
+        return $filter;
+    }
+
+    protected function prepareFilter($filterData)
+    {
+        $filter = [];
+        if (!empty($filterData['ID'])) {
+            $filter['=ID'] = $filterData['ID'];
+        }
+        if (!empty($filterData['EMPLOYEE_NAME'])) {
+            $filter['%EMPLOYEE_NAME'] = $filterData['EMPLOYEE_NAME'];
+        }
+        if (!empty($filterData['STATUS'])) {
+            $filter['=STATUS'] = $filterData['STATUS'];
+        }
+        return $filter;
     }
 
     /*
@@ -104,6 +153,73 @@ class AccessRequestFormComponent extends CBitrixComponent
 
     }
     */
+    protected function getColumns()
+    {
+        Loc::loadMessages(__FILE__);
+        return [
+            ['id' => 'ID', 'name' => "ID", 'sort' => 'ID', 'default' => true],
+            ['id' => 'USER_DECISION_MAKER', 'name' => "Ответственное лицо", 'sort' => 'USER_DECISION_MAKER', 'default' => true],
+            ['id' => 'STATUS', 'name' => "Статус", 'sort' => 'STATUS', 'default' => true],
+            ['id' => 'CREATED_DATE', 'name' => "Дата создания", 'sort' => 'CREATED_DATE', 'default' => true],
+            ['id' => 'COMMENT', 'name' => "Комментарий", 'sort' => 'COMMENT', 'default' => false],
+        ];
+    }
+
+    protected function gridAccessRequestHistrory() {
+        $gridOptions = new Options($this->gridId);
+        $navParams = $gridOptions->GetNavParams();
+        $sort = $gridOptions->GetSorting(['sort' => ['ID' => 'ASC']]);
+
+        $filter = [
+            "=REF_REQUEST" => $this->arParams['ID']
+        ];
+
+        // Получаем общее количество записей
+        $totalCount = AccessRequestHistoryTable::getList([
+            'select' => ['CNT' => new \Bitrix\Main\Entity\ExpressionField('CNT', 'COUNT(*)')],
+            'filter' => $filter,
+        ])->fetch()['CNT'];
+
+        // Получаем данные для текущей страницы
+        $list = AccessRequestHistoryTable::getList([
+            'select' => ['*'],
+            'filter' => $filter,
+            'order' => $sort['sort'],
+            'limit' => $navParams['nPageSize'],
+            'offset' => ($navParams['iNumPage']) * $navParams['nPageSize'],
+        ]);
+
+        $rows = [];
+        while ($row = $list->fetch()) {
+            $rows[] = [
+                'data' => $row,
+                'columns' => [
+                    'ID' => $row['ID'],
+                    'USER_DECISION_MAKER' => AccessRequestTable::getUserName($row['USER_DECISION_MAKER']),
+                    'STATUS' => AccessRequestTable::getStatusName($row['STATUS']),
+                    'CREATED_DATE' => $row['CREATED_DATE'] ? $row['CREATED_DATE']->toString() : '',
+                    'COMMENT' => $row['COMMENT'],
+                ],
+            ];
+        }
+
+        // Создаём объект CDBResult для пагинации
+        $cdbResult = new \CDBResult();
+        $cdbResult->InitFromArray($rows);
+        $cdbResult->NavNum = $navParams['iNumPage'];
+        $cdbResult->NavPageSize = $navParams['nPageSize'];
+        $cdbResult->NavRecordCount = $totalCount;
+        $cdbResult->NavPageCount = ceil($totalCount / $navParams['nPageSize']);
+        $cdbResult->NavStart($navParams['nPageSize'], $navParams['iNumPage']);
+
+        $this->arResult['GRID_ID'] = $this->gridId;
+        $this->arResult['COLUMNS'] = $this->getColumns();
+        $this->arResult['ROWS'] = $rows;
+        $this->arResult['NAV_OBJECT'] = $cdbResult;
+        $this->arResult['SORT'] = $sort['sort'];
+        $this->arResult['SORT_VARS'] = $sort['vars'];
+        $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
+    }
 
     protected function loadRequestData($id)
     {
