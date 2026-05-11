@@ -13,19 +13,42 @@ Loc::loadMessages(__FILE__);
 
 class AccessRequestListComponent extends CBitrixComponent
 {
-    protected $gridId = 'access_request_grid';
-    protected $filterId = 'access_request_filter';
+    protected $toolbarId = 'access_request_toolbar';
+    protected $gridId = 'access_request_toolbar';
+    protected $filterId = 'access_request_toolbar';
+
     protected $smartProcessEntityTypeId = 1042;
 
     public function onPrepareComponentParams($arParams)
     {
+        $arParams['ADD_BUTTON_URL'] = trim($arParams['ADD_BUTTON_URL'] ?? '/item/');
+        $arParams['ITEM_URL'] = trim($arParams['ITEM_URL'] ?? '/item/?ID=#ID#');
+
         return $arParams;
+    }
+
+    protected function getFilterFields(): array
+    {
+        return [
+            [
+                'id' => 'EMPLOYEE_NAME',
+                'name' => GetMessage('FILTER_EMPLOYEE_NAME'),
+                'type' => 'string',
+            ],
+            [
+                'id' => 'STATUS',
+                'name' => GetMessage('FILTER_STATUS'),
+                'type' => 'list',
+                'items' => AccessRequestTable::getStatusList(),
+            ],
+        ];
     }
 
     public function executeComponent()
     {
         Loader::includeModule('company.accessrequest');
         Loader::includeModule('crm');
+        Loader::includeModule('ui'); // Подключаем модуль ui для работы с тулбаром
 
         // 1. Инициализация грида и фильтра
         $gridOptions = new Options($this->gridId);
@@ -38,7 +61,7 @@ class AccessRequestListComponent extends CBitrixComponent
         // 2. Разделяем фильтры на две группы
         $smartProcessFilter = $this->prepareSmartProcessFilter($filterData);
         $accessRequestFilter = $this->prepareAccessRequestFilter($filterData);
-
+        $this->arResult["SMART_PROCESS_FILTER"] = $smartProcessFilter;
         // 3. Получаем ID из access_request по фильтру (если есть фильтрация по полям access_request)
         $filteredRequestIds = $this->getFilteredRequestIds($accessRequestFilter);
 
@@ -146,6 +169,23 @@ class AccessRequestListComponent extends CBitrixComponent
             ];
         }
 
+        // Подготавливаем данные для тулбара
+        $this->arResult['TOOLBAR'] = [
+            'FILTER' => [
+                'GRID_ID' => $this->gridId,
+                'FILTER_ID' => $this->filterId,
+                'FILTER' => $this->getFilters(),
+                'ENABLE_LIVE_SEARCH' => true, // Включаем живой поиск по таблице
+            ],
+            'BUTTONS' => [
+                [
+                    'text' => Loc::getMessage('ADD_REQUEST_BUTTON'),
+                    'link' => $this->arParams['ADD_BUTTON_URL'],
+                    'color' => \Bitrix\UI\Buttons\Color::PRIMARY,
+                ],
+            ],
+        ];
+
         // 10. Пагинация для грида
         $cdbResult = new \CDBResult();
         $cdbResult->InitFromArray($rows);
@@ -164,6 +204,10 @@ class AccessRequestListComponent extends CBitrixComponent
         $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
         $this->arResult['SORT'] = $sort['sort'];
         $this->arResult['SORT_VARS'] = $sort['vars'];
+
+        $this->arResult['ADD_BUTTON_URL'] = $this->arParams['ADD_BUTTON_URL'];
+        $this->arResult['ADD_REQUEST_BUTTON_TEXT'] = Loc::getMessage('ADD_REQUEST_BUTTON');
+        $this->arResult['ITEM_URL'] = $this->arParams['ITEM_URL'];
 
         $this->includeComponentTemplate();
     }
@@ -213,6 +257,19 @@ class AccessRequestListComponent extends CBitrixComponent
         if (!empty($filterData['ID'])) {
             $filter['=ID'] = $filterData['ID'];
         }
+
+        /*
+        if (!empty($filterData['FIND'])) {
+            $searchString = $filterData['FIND'];
+            // Поиск по строке FIND будет искать в полях EMPLOYEE_NAME и REQUESTED_ACCESS
+            $filter[] = [
+                'LOGIC' => 'OR',
+                ['%EMPLOYEE_NAME' => $searchString],
+                ['%REQUESTED_ACCESS' => $searchString],
+            ];
+        }
+        */
+
         return $filter;
     }
 
@@ -225,6 +282,13 @@ class AccessRequestListComponent extends CBitrixComponent
         if (!empty($filterData['SMART_STAGE'])) {
             $filter['=STAGE_ID'] = $filterData['SMART_STAGE'];
         }
+
+        if (!empty($filterData['FIND'])) {
+            $searchString = $filterData['FIND'];
+            // Поиск по строке FIND будет искать в полях EMPLOYEE_NAME и REQUESTED_ACCESS
+            $filter['%TITLE'] = $searchString;
+        }
+
         return $filter;
     }
 

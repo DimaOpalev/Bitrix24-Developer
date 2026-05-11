@@ -11,6 +11,10 @@ Loc::loadMessages(__FILE__);
 Extension::load(['ui.buttons', 'ui.forms', 'ui.alerts', 'ui.grid']);
 Asset::getInstance()->addCss('//cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
 
+<?php
+var_dump($arResult);
+?>
+
 if (!empty($arResult['ADD_BUTTON_URL'])): ?>
 <div style="margin-bottom: 20px;">
     <a href="<?= htmlspecialcharsbx($arResult['ADD_BUTTON_URL']) ?>" class="ui-btn ui-btn-primary">
@@ -40,5 +44,6 @@ $APPLICATION->IncludeComponent(
         'ENABLE_COLLAPSIBLE_ROWS' => false,
         'SORT' => $arResult['SORT'],
         'SORT_VARS' => $arResult['SORT_VARS'],
+        'SHOW_GRID_SEARCH' => true,
     ]
 );

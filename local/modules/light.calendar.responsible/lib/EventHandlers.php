@@ -62,16 +62,16 @@ class EventHandlers
                 // Обновляем событие
                 $updateResult = CCalendarEvent::Edit([
                     'arFields' => [
-                        'ID'                => $arFields['ID'],
-                        'CAL_TYPE'          => $arFields['CAL_TYPE'],
-                        'OWNER_ID'          => $arFields['OWNER_ID'],
-                        'SECTION_ID'        => $arFields['SECTION_ID'],
-                        'NAME'              => $arFields['NAME'],
-                        'DESCRIPTION'       => $arFields['DESCRIPTION'], // ПЕРЕДАЕМ ОПИСАНИЕ
-                        'ATTENDEES_CODES'   => $currentAttendees,
-                        'LOCATION'          => $arFields['LOCATION'],
-                        'REMIND'            => $arFields['REMIND'],      // ПЕРЕДАЕМ НАПОМИНАНИЯ
-                        'IS_MEETING'        => true,
+                        'ID' => $arFields['ID'],
+                        'CAL_TYPE' => $arFields['CAL_TYPE'],
+                        'OWNER_ID' => $arFields['OWNER_ID'],
+                        'SECTION_ID' => $arFields['SECTION_ID'],
+                        'NAME' => $arFields['NAME'],
+                        'DESCRIPTION' => $arFields['DESCRIPTION'], // ПЕРЕДАЕМ ОПИСАНИЕ
+                        'ATTENDEES_CODES' => $currentAttendees,
+                        'LOCATION' => $arFields['LOCATION'],
+                        'REMIND' => $arFields['REMIND'],      // ПЕРЕДАЕМ НАПОМИНАНИЯ
+                        'IS_MEETING' => true,
                         'MEETING' => array_merge($arFields['MEETING'], [
                             'REINVITE' => true,
                         ]),

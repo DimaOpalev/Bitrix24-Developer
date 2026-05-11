@@ -53,11 +53,6 @@ class AccessRequestFormComponent extends CBitrixComponent
             $this->arResult['REQUEST'] = [];
         }
 
-        // Обработка POST (сохранение или отправка на согласование)
-        if (check_bitrix_sessid()) {
-            $this->handlePost();
-        }
-
         // Подготовка данных для шаблона
         $this->arResult['STATUS_LIST'] = AccessRequestTable::getStatusList();
         $this->arResult['ACCESS_RULES'] = [
@@ -67,6 +62,11 @@ class AccessRequestFormComponent extends CBitrixComponent
         $this->arResult['CURRENT_STATUS'] = $this->arResult['REQUEST']['STATUS'] ?? AccessRequestTable::STATUS_NEW;
 
         $this->arResult['BACK_URL'] = $this->arParams['BACK_URL'];
+
+        // Обработка POST (сохранение или отправка на согласование)
+        if (check_bitrix_sessid()) {
+            $this->handlePost();
+        }
 
         /**
          * Подготовка грида gridAccessRequestHistrory

@@ -8,9 +8,6 @@ use Bitrix\Main\Page\Asset;
 Extension::load(['ui.buttons', 'ui.alerts']);
 Asset::getInstance()->addCss('//cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
 
-
-$APPLICATION->SetTitle(Loc::getMessage('FORM_TITLE'));
-
 if (!empty($arResult['ERRORS'])) {
     foreach ($arResult['ERRORS'] as $error) {
         echo '<div class="ui-alert ui-alert-danger">' . $error . '</div>';
@@ -18,6 +15,8 @@ if (!empty($arResult['ERRORS'])) {
 }
 
 ?>
+<a class="ui-btn ui-btn-sm" href="<?= $arResult['BACK_URL'] ?>"><?= Loc::getMessage('BACK_BUTTON') ?></a>
+
 <div class="container my-5">
     <div class="row">
         <div class="col-lg-6">
