@@ -10,17 +10,17 @@ use Bitrix\UI\Toolbar\Facade\Toolbar;
 Loc::loadMessages(__FILE__);
 Extension::load(['ui.buttons', 'ui.forms', 'ui.alerts', 'ui.grid']);
 
-// Добавляем фильтр в тулбар
-if (isset($arResult['TOOLBAR']['FILTER'])) {
-    Toolbar::addFilter($arResult['TOOLBAR']['FILTER']);
-}
-
 // Добавляем кнопки в тулбар
 if (isset($arResult['TOOLBAR']['BUTTONS'])) {
     foreach ($arResult['TOOLBAR']['BUTTONS'] as $buttonParams) {
         $button = new \Bitrix\UI\Buttons\Button($buttonParams);
         Toolbar::addButton($button);
     }
+}
+
+// Добавляем фильтр в тулбар
+if (isset($arResult['TOOLBAR']['FILTER'])) {
+    Toolbar::addFilter($arResult['TOOLBAR']['FILTER']);
 }
 
 // Подключаем грид, уже без отдельной кнопки
@@ -34,6 +34,16 @@ $APPLICATION->IncludeComponent(
         'NAV_OBJECT' => $arResult['NAV_OBJECT'],
         'TOTAL_ROWS_COUNT' => $arResult['TOTAL_ROWS_COUNT'],
         'SHOW_PAGESIZE' => true,
+        'SHOW_NAVIGATION_PANEL' => true,
+        'NAV_PARAM_NAME' => 'page',
+        'PAGE_SIZES' => [                  // Доступные варианты (опционально)
+            ['NAME' => '5', 'VALUE' => '5'],
+            ['NAME' => '10', 'VALUE' => '10'],
+            ['NAME' => '20', 'VALUE' => '20'],
+            ['NAME' => '50', 'VALUE' => '50'],
+            ['NAME' => '100', 'VALUE' => '100'],
+        ],
+        'DEFAULT_PAGE_SIZE' => 50,
         'SHOW_ROW_CHECKBOXES' => false,
         'SHOW_CHECK_ALL_CHECKBOXES' => false,
         'SHOW_SELECTED_COUNTER' => false,

@@ -374,6 +374,9 @@ class AccessRequestFormComponent extends CBitrixComponent
         $item = $factory->createItem();
         $item->setTitle(Loc::getMessage('TITLE_EMPLOYEE_ACCESS') . ': ' .  $post["POST_DATA"]['FIO'] ?? "");
 
+        $observerIds = [$USER->GetID()];
+        $item->setObservers($observerIds);
+        
         // Устанавливаем связь с заявкой
         $item->set($requestIdFieldName, $requestId);
 

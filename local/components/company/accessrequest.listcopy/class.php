@@ -27,6 +27,23 @@ class AccessRequestListComponent extends CBitrixComponent
         return $arParams;
     }
 
+    protected function setRows($request, $item): array 
+    {
+        return [
+            'data' => $request,
+            'columns' => [
+                'REQUEST_ID' => $request['ID'],
+                'EMPLOYEE_NAME' => $request['EMPLOYEE_NAME'],
+                'REQUEST_STATUS' => AccessRequestTable::getStatusName($request['STATUS']),
+                'CREATED_DATE' => $request['CREATED_DATE'] ? $request['CREATED_DATE']->toString() : '',
+                'SMART_STAGE' => $item ? $this->getStageName($item->getStageId()) : null,
+                'SMART_ASSIGNED' => $item ? $this->getUserName($item->get('ASSIGNED_BY_ID')) : null,
+                'SMART_CREATED' => $item ? ($item->get('CREATED_TIME') ? $item->get('CREATED_TIME')->toString() : '') : null,
+            ],
+            'actions' => $this->getRowActions($request),
+        ];
+    }
+
     protected function getFilterFields(): array
     {
         return [
@@ -48,135 +65,48 @@ class AccessRequestListComponent extends CBitrixComponent
     {
         Loader::includeModule('company.accessrequest');
         Loader::includeModule('crm');
-        Loader::includeModule('ui'); // Подключаем модуль ui для работы с тулбаром
+        Loader::includeModule('ui');
 
         // 1. Инициализация грида и фильтра
         $gridOptions = new Options($this->gridId);
-        $navParams = $gridOptions->GetNavParams();
-        $sort = $gridOptions->GetSorting(['sort' => ['ID' => 'DESC']]);
+        $navParams = $gridOptions->GetNavParams('page');  // ← явно указываем 'page'
 
+        // Нормализация параметров пагинации
+        $currentPage = max(1, (int)($navParams['iNumPage'] ?? 1));
+        $pageSize = max(1, (int)($navParams['nPageSize'] ?? 20));
+
+        // Получаем сортировку от пользователя
+        $userSort = $gridOptions->GetSorting(['sort' => ['ID' => 'DESC']]);
+        $sort = $userSort['sort'];
+
+        // Сортировка для смарт-процесса (разрешенные поля)
+        $allowedSmartSortFields = ['ID', 'CREATED_TIME', 'STAGE_ID', 'ASSIGNED_BY_ID'];
+        $smartOrder = [];
+        foreach ($sort as $field => $direction) {
+            if (in_array($field, $allowedSmartSortFields)) {
+                $smartOrder[$field] = $direction;
+            }
+        }
+        if (empty($smartOrder)) {
+            $smartOrder = ['ID' => 'DESC'];
+        }
+
+        // Сортировка для access_request (разрешенные поля)
+        $allowedAccessSortFields = ['ID', 'CREATED_DATE', 'STATUS', 'EMPLOYEE_NAME'];
+        $accessOrder = [];
+        foreach ($sort as $field => $direction) {
+            if (in_array($field, $allowedAccessSortFields)) {
+                $accessOrder[$field] = $direction;
+            }
+        }
+        $accessOrderFinal = !empty($accessOrder) ? $accessOrder : ['ID' => 'DESC'];
+
+        // Получаем данные фильтра
         $filterOption = new FilterOptions($this->filterId);
         $filterData = $filterOption->getFilter($this->getFilters());
 
-        // 2. Разделяем фильтры на две группы
-        $smartProcessFilter = $this->prepareSmartProcessFilter($filterData);
-        $accessRequestFilter = $this->prepareAccessRequestFilter($filterData);
-        $this->arResult["SMART_PROCESS_FILTER"] = $smartProcessFilter;
-        // 3. Получаем ID из access_request по фильтру (если есть фильтрация по полям access_request)
-        $filteredRequestIds = $this->getFilteredRequestIds($accessRequestFilter);
-
-        // 4. Если есть фильтр по access_request и он не дал результатов — выходим
-        if ($filteredRequestIds !== null && empty($filteredRequestIds)) {
-            $this->arResult['ROWS'] = [];
-            $this->arResult['TOTAL_ROWS_COUNT'] = 0;
-            $this->arResult['NAV_OBJECT'] = null;
-            $this->includeComponentTemplate();
-            return;
-        }
-
-        // 5. Добавляем ID в фильтр смарт-процесса
-        if (!empty($filteredRequestIds)) {
-            $smartProcessFilter['=UF_CRM_4_REQUEST_ID'] = $filteredRequestIds;
-        }
-
-        // 6. Получаем данные из смарт-процесса с учётом прав и пагинации
-        $factory = Container::getInstance()->getFactory($this->smartProcessEntityTypeId);
-        if (!$factory) {
-            ShowError('Смарт-процесс не найден');
-            return;
-        }
-
-        $smartItemsResult = $factory->getItemsFilteredByPermissions([
-            'select' => ['ID', 'UF_CRM_4_REQUEST_ID', 'STAGE_ID', 'ASSIGNED_BY_ID', 'CREATED_TIME'],
-            'filter' => $smartProcessFilter,
-            'order' => ['ID' => 'DESC'],
-            'limit' => $navParams['nPageSize'],
-            'offset' => ($navParams['iNumPage']) * $navParams['nPageSize'],
-            'count_total' => true,
-        ], $this->getUserId());
-
-        // В зависимости от версии, результат может быть массивом или объектом
-        if (is_array($smartItemsResult)) {
-            // Старая версия — возвращает массив
-            $smartItems = $smartItemsResult;
-            $totalCount = count($smartItems); // или нужно делать отдельный запрос для подсчёта
-        } else {
-            // Новая версия — возвращает объект с методами
-            $smartItems = [];
-            foreach ($smartItemsResult as $item) {
-                $smartItems[] = $item;
-            }
-            $totalCount = $smartItemsResult->getCount();
-        }
-
-        $smartItems = [];
-        foreach ($smartItemsResult as $item) {
-            $smartItems[] = $item;
-            $requestIds[] = $item->get('UF_CRM_4_REQUEST_ID');
-        }
-
-        // 7. Если нет элементов — выводим пустой грид
-        if (empty($smartItems)) {
-            $this->arResult['ROWS'] = [];
-            $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
-            $this->setupGridAndIncludeTemplate($gridOptions, $navParams, $sort, $totalCount);
-            return;
-        }
-
-        // 8. Получаем данные из access_request по ID из смарт-процесса
-        $requestsData = [];
-        if (!empty($requestIds)) {
-            $list = AccessRequestTable::getList([
-                'select' => ['*'],
-                'filter' => [
-                    'LOGIC' => 'OR',
-                    [
-                        '=ID' => $requestIds,
-                    ],
-                    [
-                        '=STATUS' => 0,
-                        '=REF_CREATE_USER' => $this->getUserId(),
-                    ],
-                ],
-            ]);
-            while ($row = $list->fetch()) {
-                $requestsData[$row['ID']] = $row;
-            }
-        }
-
-        // 9. Формируем строки для грида
-        $rows = [];
-        foreach ($smartItems as $item) {
-            $requestId = $item->get('UF_CRM_4_REQUEST_ID');
-            $request = $requestsData[$requestId] ?? null;
-            
-            if (!$request) {
-                continue;
-            }
-
-            $rows[] = [
-                'data' => $request,
-                'columns' => [
-                    'ID' => $item->getId(),
-                    'EMPLOYEE_NAME' => $request['EMPLOYEE_NAME'],
-                    'REQUEST_STATUS' => AccessRequestTable::getStatusName($request['STATUS']),
-                    'CREATED_DATE' => $request['CREATED_DATE'] ? $request['CREATED_DATE']->toString() : '',
-                    'SMART_STAGE' => $this->getStageName($item->getStageId()),
-                    'SMART_ASSIGNED' => $this->getUserName($item->get('ASSIGNED_BY_ID')),
-                    'SMART_CREATED' => $item->get('CREATED_TIME') ? $item->get('CREATED_TIME')->toString() : '',
-                ],
-                'actions' => $this->getRowActions($request),
-            ];
-        }
-
         // Подготавливаем данные для тулбара
         $this->arResult['TOOLBAR'] = [
-            'FILTER' => [
-                'GRID_ID' => $this->gridId,
-                'FILTER_ID' => $this->filterId,
-                'FILTER' => $this->getFilters(),
-                'ENABLE_LIVE_SEARCH' => true, // Включаем живой поиск по таблице
-            ],
             'BUTTONS' => [
                 [
                     'text' => Loc::getMessage('ADD_REQUEST_BUTTON'),
@@ -184,30 +114,131 @@ class AccessRequestListComponent extends CBitrixComponent
                     'color' => \Bitrix\UI\Buttons\Color::PRIMARY,
                 ],
             ],
+            'FILTER' => [
+                'GRID_ID' => $this->gridId,
+                'FILTER_ID' => $this->filterId,
+                'FILTER' => $this->getFilters(),
+                'ENABLE_LIVE_SEARCH' => true,
+            ],
         ];
 
-        // 10. Пагинация для грида
-        $cdbResult = new \CDBResult();
-        $cdbResult->InitFromArray($rows);
-        $cdbResult->NavNum = $navParams['iNumPage'];
-        $cdbResult->NavPageSize = $navParams['nPageSize'];
-        $cdbResult->NavRecordCount = $totalCount;
-        $cdbResult->NavPageCount = ceil($totalCount / $navParams['nPageSize']);
+        // Подготавливаем фильтры
+        $smartProcessFilter = $this->prepareSmartProcessFilter($filterData);
 
-        // 11. Передаём в шаблон
+        // Получаем ID из смарт-процесса (для связанных заявок)
+        $factory = Container::getInstance()->getFactory($this->smartProcessEntityTypeId);
+        if (!$factory) {
+            ShowError('Смарт-процесс не найден');
+            return;
+        }
+
+        $smartItemsResult = $factory->getItemsFilteredByPermissions([
+            'select' => ['ID', 'TITLE', 'UF_CRM_4_REQUEST_ID', 'STAGE_ID', 'ASSIGNED_BY_ID', 'CREATED_TIME'],
+            'filter' => $smartProcessFilter,
+            'order' => $smartOrder,
+        ], $this->getUserId());
+
+        $smartRequestIds = [];
+        $smartItemsById = [];
+
+        if (is_array($smartItemsResult)) {
+            foreach ($smartItemsResult as $item) {
+                $requestId = $item['UF_CRM_4_REQUEST_ID'];
+                if ($requestId) {
+                    $smartRequestIds[] = $requestId;
+                    $smartItemsById[$requestId] = $item;
+                }
+            }
+        } else {
+            foreach ($smartItemsResult as $item) {
+                $requestId = $item->get('UF_CRM_4_REQUEST_ID');
+                if ($requestId) {
+                    $smartRequestIds[] = $requestId;
+                    $smartItemsById[$requestId] = $item;
+                }
+            }
+        }
+
+        // Формируем фильтр для access_request (включая новые заявки со статусом 0)
+        $accessFilter = [
+            'LOGIC' => 'OR',
+            [
+                '=ID' => !empty($smartRequestIds) ? $smartRequestIds : 0,
+            ],
+            [
+                '=STATUS' => 0,
+                '=REF_CREATE_USER' => $this->getUserId(),
+            ],
+        ];
+
+        // Получаем данные из access_request с пагинацией и сортировкой
+        $list = AccessRequestTable::getList([
+            'select' => ['*'],
+            'filter' => $accessFilter,
+            'order' => $accessOrderFinal,
+            'limit' => $pageSize,
+            'offset' => ($currentPage - 1) * $pageSize,
+        ]);
+
+        // Формируем строки для грида
+        $rows = [];
+        while ($row = $list->fetch()) {
+            $smartItem = $smartItemsById[$row['ID']] ?? null;
+            $rows[] = $this->setRows($row, $smartItem);
+        }
+
+        // Пагинация для грида
+        // После получения $rows
+$totalCount = AccessRequestTable::getList([
+    'select' => ['CNT' => new \Bitrix\Main\Entity\ExpressionField('CNT', 'COUNT(*)')],
+    'filter' => $accessFilter,
+])->fetch()['CNT'];
+
+// Пагинация для грида
+$cdbResult = new \CDBResult();
+$cdbResult->InitFromArray($rows);
+$cdbResult->NavNum = 1;
+$cdbResult->NavPageSize = $pageSize;
+$cdbResult->NavRecordCount = $totalCount;
+$cdbResult->NavPageCount = ceil($totalCount / $pageSize);
+$cdbResult->NavStart($pageSize, $currentPage);
+
+
+        // Передаём в шаблон
         $this->arResult['GRID_ID'] = $this->gridId;
         $this->arResult['FILTER_ID'] = $this->filterId;
         $this->arResult['COLUMNS'] = $this->getColumns();
         $this->arResult['FILTERS'] = $this->getFilters();
         $this->arResult['ROWS'] = $rows;
         $this->arResult['NAV_OBJECT'] = $cdbResult;
+// $this->arResult['NAV_OBJECT'] = [
+//     'NavRecordCount' => $cdbResult->NavRecordCount,
+//     'NavPageCount' => $cdbResult->NavPageCount,
+//     'NavPageSize' => $cdbResult->NavPageSize,
+//     'NavNum' => $cdbResult->NavNum,
+//     'iNumPage' => $currentPage,
+// ];
+
         $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
-        $this->arResult['SORT'] = $sort['sort'];
-        $this->arResult['SORT_VARS'] = $sort['vars'];
+        $this->arResult['SORT'] = $sort;
+        $this->arResult['SORT_VARS'] = $userSort['vars'];
 
         $this->arResult['ADD_BUTTON_URL'] = $this->arParams['ADD_BUTTON_URL'];
         $this->arResult['ADD_REQUEST_BUTTON_TEXT'] = Loc::getMessage('ADD_REQUEST_BUTTON');
         $this->arResult['ITEM_URL'] = $this->arParams['ITEM_URL'];
+
+        var_dump([
+            'totalCount' => $totalCount,
+            'NavRecordCount' => $cdbResult->NavRecordCount,
+            'NavPageCount' => $cdbResult->NavPageCount,
+            'NavPageSize' => $cdbResult->NavPageSize,
+            'NavNum' => $cdbResult->NavNum,
+            'iNumPage' => $currentPage,
+        ]);
+        echo "<!-- NAV_OBJECT: " . get_class($this->arResult['NAV_OBJECT']) . " -->";
+        echo "<!-- NavRecordCount: " . $this->arResult['NAV_OBJECT']->NavRecordCount . " -->";
+        echo "<!-- NavPageCount: " . $this->arResult['NAV_OBJECT']->NavPageCount . " -->";
+        echo "<!-- pageSize: " . $this->arResult['NAV_OBJECT']->NavPageSize . " -->";
 
         $this->includeComponentTemplate();
     }
@@ -218,13 +249,13 @@ class AccessRequestListComponent extends CBitrixComponent
     protected function getColumns()
     {
         return [
-            ['id' => 'ID', 'name' => 'ID СП', 'sort' => 'ID', 'default' => true],
-            ['id' => 'EMPLOYEE_NAME', 'name' => Loc::getMessage('COLUMN_EMPLOYEE_NAME'), 'default' => true],
-            ['id' => 'REQUEST_STATUS', 'name' => 'Статус заявки', 'default' => true],
-            ['id' => 'SMART_STAGE', 'name' => 'Стадия СП', 'default' => true],
+            ['id' => 'REQUEST_ID', 'name' => 'ID заявки', 'sort' => 'ID', 'default' => true],
+            ['id' => 'EMPLOYEE_NAME', 'name' => Loc::getMessage('COLUMN_EMPLOYEE_NAME'), 'sort' => 'EMPLOYEE_NAME', 'default' => true],
+            ['id' => 'REQUEST_STATUS', 'name' => 'Статус заявки', 'sort' => 'STATUS', 'default' => true],
+            ['id' => 'SMART_STAGE', 'name' => 'Стадия СП', 'sort' => 'STAGE_ID', 'default' => true],
             ['id' => 'CREATED_DATE', 'name' => Loc::getMessage('COLUMN_CREATED_DATE'), 'sort' => 'CREATED_DATE', 'default' => true],
-            ['id' => 'SMART_ASSIGNED', 'name' => 'Ответственный в СП', 'default' => false],
-            ['id' => 'SMART_CREATED', 'name' => 'Дата создания в СП', 'default' => false],
+            ['id' => 'SMART_ASSIGNED', 'name' => 'Ответственный в СП', 'sort' => 'ASSIGNED_BY_ID', 'default' => false],
+            ['id' => 'SMART_CREATED', 'name' => 'Дата создания в СП', 'sort' => 'CREATED_TIME', 'default' => false],
         ];
     }
 
@@ -233,6 +264,8 @@ class AccessRequestListComponent extends CBitrixComponent
      */
     protected function getFilters()
     {
+        $stageList = $this->getStageList();
+        
         return [
             ['id' => 'ID', 'name' => 'ID заявки', 'type' => 'number'],
             ['id' => 'EMPLOYEE_NAME', 'name' => Loc::getMessage('FILTER_EMPLOYEE_NAME'), 'type' => 'string'],
@@ -240,7 +273,7 @@ class AccessRequestListComponent extends CBitrixComponent
                 'id' => 'SMART_STAGE',
                 'name' => 'Стадия СП',
                 'type' => 'list',
-                'items' => $this->getStageList(),
+                'items' => $stageList,
             ],
         ];
     }
@@ -251,24 +284,13 @@ class AccessRequestListComponent extends CBitrixComponent
     protected function prepareAccessRequestFilter($filterData)
     {
         $filter = [];
+        
         if (!empty($filterData['EMPLOYEE_NAME'])) {
             $filter['%EMPLOYEE_NAME'] = $filterData['EMPLOYEE_NAME'];
         }
-        if (!empty($filterData['ID'])) {
-            $filter['=ID'] = $filterData['ID'];
-        }
-
-        /*
-        if (!empty($filterData['FIND'])) {
-            $searchString = $filterData['FIND'];
-            // Поиск по строке FIND будет искать в полях EMPLOYEE_NAME и REQUESTED_ACCESS
-            $filter[] = [
-                'LOGIC' => 'OR',
-                ['%EMPLOYEE_NAME' => $searchString],
-                ['%REQUESTED_ACCESS' => $searchString],
-            ];
-        }
-        */
+        
+        // ID теперь обрабатывается в смарт-процессе
+        // не нужно добавлять его в фильтр access_request
 
         return $filter;
     }
@@ -279,13 +301,20 @@ class AccessRequestListComponent extends CBitrixComponent
     protected function prepareSmartProcessFilter($filterData)
     {
         $filter = [];
+
+        // Фильтр по стадии смарт-процесса
         if (!empty($filterData['SMART_STAGE'])) {
             $filter['=STAGE_ID'] = $filterData['SMART_STAGE'];
         }
 
+        // Фильтр по ID заявки (из access_request)
+        if (!empty($filterData['ID'])) {
+            $filter['=UF_CRM_4_REQUEST_ID'] = (int)$filterData['ID'];
+        }
+
+        // Глобальный поиск
         if (!empty($filterData['FIND'])) {
             $searchString = $filterData['FIND'];
-            // Поиск по строке FIND будет искать в полях EMPLOYEE_NAME и REQUESTED_ACCESS
             $filter['%TITLE'] = $searchString;
         }
 
@@ -296,22 +325,28 @@ class AccessRequestListComponent extends CBitrixComponent
      * Возвращает ID заявок из access_request по фильтру
      * Возвращает null, если фильтра нет
      */
-    protected function getFilteredRequestIds(array $filter)
+    protected function getFilteredRequestIds(array $filter, array $order = [])
     {
         if (empty($filter)) {
             return null;
         }
 
-        $result = AccessRequestTable::getList([
+        $params = [
             'select' => ['ID'],
             'filter' => $filter,
-        ]);
-        
+        ];
+
+        if (!empty($order)) {
+            $params['order'] = $order;
+        }
+
+        $result = AccessRequestTable::getList($params);
+
         $ids = [];
         while ($row = $result->fetch()) {
             $ids[] = $row['ID'];
         }
-        
+
         return $ids;
     }
 
@@ -327,12 +362,7 @@ class AccessRequestListComponent extends CBitrixComponent
             return $stages;
         }
         
-        // getStageList() уже возвращает коллекцию объектов EO_Status
         $stageCollection = $factory->getStages();
-        // var_dump($stageCollection);
-        // die();
-        
-        //->getStageList();
         
         /** @var \Bitrix\Crm\EO_Status $stage */
         foreach ($stageCollection as $stage) {
@@ -387,10 +417,11 @@ class AccessRequestListComponent extends CBitrixComponent
      */
     protected function getRowActions($row)
     {
+        $url = str_replace('#ID#', $row['ID'], $this->arParams['ITEM_URL']);
         return [
             [
                 'text' => Loc::getMessage('ACTION_OPEN'),
-                'onclick' => "window.location.href='/dlya-sotrudnikov/list-dopuska/item/?ID=" . $row['ID'] . "'",
+                'onclick' => "window.location.href='" . $url . "'",
                 'default' => true,
             ],
         ];
@@ -399,14 +430,35 @@ class AccessRequestListComponent extends CBitrixComponent
     /**
      * Настройка грида и шаблона при пустом результате
      */
-    protected function setupGridAndIncludeTemplate($gridOptions, $navParams, $sort, $totalCount)
+    protected function setupGridAndIncludeTemplate($gridOptions, $navParams, $userSort, $totalCount)
     {
+        // TOOLBAR уже должен быть установлен в executeComponent
+        // но на случай, если метод вызван до установки, продублируем
+        if (!isset($this->arResult['TOOLBAR'])) {
+            $this->arResult['TOOLBAR'] = [
+                'BUTTONS' => [
+                    [
+                        'text' => Loc::getMessage('ADD_REQUEST_BUTTON'),
+                        'link' => $this->arParams['ADD_BUTTON_URL'],
+                        'color' => \Bitrix\UI\Buttons\Color::PRIMARY,
+                    ],
+                ],
+                'FILTER' => [
+                    'GRID_ID' => $this->gridId,
+                    'FILTER_ID' => $this->filterId,
+                    'FILTER' => $this->getFilters(),
+                    'ENABLE_LIVE_SEARCH' => true,
+                ],
+            ];
+        }
+        
         $this->arResult['GRID_ID'] = $this->gridId;
         $this->arResult['FILTER_ID'] = $this->filterId;
         $this->arResult['COLUMNS'] = $this->getColumns();
         $this->arResult['FILTERS'] = $this->getFilters();
-        $this->arResult['SORT'] = $sort['sort'];
-        $this->arResult['SORT_VARS'] = $sort['vars'];
+        $this->arResult['ROWS'] = [];
+        $this->arResult['SORT'] = $userSort['sort'];
+        $this->arResult['SORT_VARS'] = $userSort['vars'];
         $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
         
         // Создаём пустой CDBResult для пагинации
@@ -416,6 +468,7 @@ class AccessRequestListComponent extends CBitrixComponent
         $cdbResult->NavPageSize = $navParams['nPageSize'];
         $cdbResult->NavRecordCount = $totalCount;
         $cdbResult->NavPageCount = ceil($totalCount / $navParams['nPageSize']);
+        $cdbResult->NavStart($navParams['nPageSize'], $navParams['iNumPage']);
         $this->arResult['NAV_OBJECT'] = $cdbResult;
         
         $this->includeComponentTemplate();
