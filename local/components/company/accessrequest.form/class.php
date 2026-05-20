@@ -117,42 +117,6 @@ class AccessRequestFormComponent extends CBitrixComponent
         return $filter;
     }
 
-    /*
-    protected function loadAccessDirectory()
-    {
-        // Получаем структуру из инфоблока "list_dopuska"
-        $result = [];
-        $sections = [];
-        $elements = [];
-
-        $rsSections = CIBlockSection::GetList(
-            ['SORT' => 'ASC'],
-            ['IBLOCK_CODE' => 'list_dopuska', 'ACTIVE' => 'Y'],
-            false,
-            ['ID', 'NAME', 'IBLOCK_SECTION_ID', 'DEPTH_LEVEL']
-        );
-
-        while ($section = $rsSections->Fetch()) {
-            $sections[$section['ID']] = $section;
-        }
-
-        $rsElements = CIBlockElement::GetList(
-            ['IBLOCK_SECTION_ID' => 'ASC', 'SORT' => 'ASC'],
-            ['IBLOCK_CODE' => 'list_dopuska', 'ACTIVE' => 'Y', 'SECTION_ID' => array_keys($sections)],
-            false,
-            false,
-            ['ID', 'NAME', 'IBLOCK_SECTION_ID', 'CODE']
-        );
-
-        while ($element = $rsElements->Fetch()) {
-            $elements[$element['ID']] = $element;
-        }
-
-        $this->arResult['ACCESS_SECTIONS'] = $sections;
-        $this->arResult['ACCESS_ELEMENTS'] = $elements;
-
-    }
-    */
     protected function getColumns()
     {
         Loc::loadMessages(__FILE__);
@@ -223,7 +187,26 @@ class AccessRequestFormComponent extends CBitrixComponent
 
     protected function loadRequestData($id)
     {
+        global $USER;
+
         $request = AccessRequestTable::getById($id)->fetch();
+
+        if($request['REF_CREATE_USER'] != $USER->GetID() && $request['STATUS'] === AccessRequestTable::STATUS_NEW) {
+            LocalRedirect($this->arParams['BACK_URL']);
+        }
+
+        if (AccessRequestTable::accessRightElementByID($id) === false) {
+            ShowError('Смарт-процесс не найден');
+            LocalRedirect($this->arParams['BACK_URL']);
+        }
+
+         // Получаем данные смарт-процесса для отображения текущего этапа и ответственного
+         $item = null;
+         if ($request['REF_SMART_PROCESS_ID']) {
+             $factory = \Bitrix\Crm\Service\Container::getInstance()->getFactoryByEntityTypeId(COMPANY_ACCESSREQUEST_MODULE_ID);
+             $item = $factory->getItem($request['REF_SMART_PROCESS_ID']);
+
+        }
         if (!$request) {
             LocalRedirect($this->arParams['BACK_URL']);
         }
@@ -241,6 +224,7 @@ class AccessRequestFormComponent extends CBitrixComponent
         // Если заявка уже согласована или отклонена — только чтение
         $status = $this->arResult['REQUEST']['STATUS'];
         return in_array($status, [
+            AccessRequestTable::STATUS_REVIEW,
             AccessRequestTable::STATUS_APPROVED,
             AccessRequestTable::STATUS_REJECTED,
             AccessRequestTable::STATUS_CANCELLED,
@@ -397,12 +381,12 @@ class AccessRequestFormComponent extends CBitrixComponent
         ]);
 
         // Добавляем запись в историю
-        AccessRequestHistoryTable::add([
-            'REF_REQUEST' => $requestId,
-            'USER_DECISION_MAKER' => $GLOBALS['USER']->GetID(),
-            'STATUS' => AccessRequestTable::STATUS_REVIEW,
-            'COMMENT' => Loc::getMessage('REQUEST_SENT'),
-        ]);
+        // AccessRequestHistoryTable::add([
+        //     'REF_REQUEST' => $requestId,
+        //     'USER_DECISION_MAKER' => $GLOBALS['USER']->GetID(),
+        //     'STATUS' => AccessRequestTable::STATUS_REVIEW,
+        //     'COMMENT' => Loc::getMessage('REQUEST_SENT'),
+        // ]);
         
         return $smartProcessId;
         // Здесь логика запуска бизнес-процесса или создания задачи

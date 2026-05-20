@@ -100,7 +100,7 @@ class AccessRequestListComponent extends CBitrixComponent
             ['id' => 'STATUS', 'name' => Loc::getMessage('COLUMN_STATUS'), 'sort' => 'STATUS', 'default' => true],
             ['id' => 'CREATED_DATE', 'name' => Loc::getMessage('COLUMN_CREATED_DATE'), 'sort' => 'CREATED_DATE', 'default' => true],
             ['id' => 'REF_CREATE_USER', 'name' => Loc::getMessage('COLUMN_CREATOR'), 'sort' => 'REF_CREATE_USER', 'default' => false],
-            ['id' => 'REF_TASK', 'name' => Loc::getMessage('COLUMN_TASK'), 'default' => false],
+            ['id' => 'REF_TASK', 'name' => Loc::getMessage('COLUMN_TASK'), 'default' => true],
         ];
     }
 

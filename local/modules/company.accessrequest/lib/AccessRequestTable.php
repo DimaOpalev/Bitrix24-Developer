@@ -8,6 +8,8 @@ use Bitrix\Main\ORM\Fields\StringField;
 use Bitrix\Main\ORM\Fields\TextField;
 use Bitrix\Main\ORM\Fields\DatetimeField;
 use Bitrix\Main\ORM\Fields\Relations\OneToMany;
+use Bitrix\Crm\Service\Container;
+
 use Bitrix\Main\Type\DateTime;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Loader;
@@ -29,6 +31,40 @@ class AccessRequestTable extends DataManager
         self::STATUS_CANCELLED => "text-bg-danger",
         self::STATUS_REJECTED => "text-bg-danger",
     ];
+
+    public static function getUserId()
+    {
+        global $USER;
+        return $USER->GetID();
+    }
+
+
+    public static function accessRightElementByID($ID = 0)
+    {
+        Loader::includeModule('company.accessrequest');
+        $moduleId = COMPANY_ACCESSREQUEST_MODULE_ID;
+
+        $smartProcessEntityTypeId = (int)\Bitrix\Main\Config\Option::get($moduleId, 'entity_type_id', 0);
+        $factory = Container::getInstance()->getFactory($smartProcessEntityTypeId);
+
+        if (!$factory) {
+            ShowError('Смарт-процесс не найден');
+            return;
+        }
+
+        $smartProcessFilter = ['UF_CRM_4_REQUEST_ID' =>(int)$ID];
+        
+        global $USER;
+        $userId = $USER->GetID();
+
+        $smartItemsResult = $factory->getItemsFilteredByPermissions([
+            'select' => ['ID', 'TITLE', 'UF_CRM_4_REQUEST_ID', 'STAGE_ID', 'ASSIGNED_BY_ID', 'CREATED_TIME'],
+            'filter' => $smartProcessFilter,
+        ], self::getUserId());
+
+        return !empty($smartItemsResult);
+
+    }
 
     public static function getTableName()
     {
@@ -78,7 +114,8 @@ class AccessRequestTable extends DataManager
         return self::getStatusList()[$status] ?? Loc::getMessage('ACCESS_STATUS_UNKNOWN');
     }
 
-    public static function generateText(int $requestId): string
+
+    private static function getAccessRequestById(int $requestId): ?array
     {
         Loader::includeModule('company.accessrequest');
 
@@ -99,6 +136,19 @@ class AccessRequestTable extends DataManager
             false,
             ['ID', 'NAME']
         )->fetch();
+
+        return [
+            $request,
+            $arResult,
+            $accessList,
+            $history,
+            $arDepartment
+        ];
+    }
+
+    public static function generateText(int $requestId): string
+    {
+        list($request, $arResult, $accessList, $history, $arDepartment) = self::getAccessRequestById($requestId);
 
         $text = [];
         $text[] = "[b]ЛИСТ ДОПУСКА[/b] №{$request['ID']}";
@@ -141,6 +191,84 @@ class AccessRequestTable extends DataManager
 
         return implode("\n", $text);
     }
+
+    public static function generateHTML(int $requestId): string
+    {
+        list($request, $arResult, $accessList, $history, $arDepartment) = self::getAccessRequestById($requestId);
+        $html = [];
+
+        $html[] = "[table]";
+            $html[] = "[tr]";
+                $html[] = "[td]";
+                    $html[] = "ЛИСТ ДОПУСКА №{$request['ID']}";
+                $html[] = "[/td][td][/td]";
+            $html[] = "[/tr]";
+            $html[] = "[tr]";
+                $html[] = "[td]";
+                    $html[] = "Дата создания:";
+                $html[] = "[/td]";
+                $html[] = "[td]";
+                    $html[] = $request['CREATED_DATE']->toString();
+                $html[] = "[/td]";
+            $html[] = "[/tr]";
+            $html[] = "[tr]";
+                $html[] = "[td]";
+                    $html[] = "Сотрудник:";
+                $html[] = "[/td]";
+                $html[] = "[td]";
+                    $html[] = $accessList['FIO'];
+                $html[] = "[/td]";
+            $html[] = "[/tr]";
+            $html[] = "[tr]";
+                $html[] = "[td]";
+                    $html[] = "Отдел:";
+                $html[] = "[/td]";
+                $html[] = "[td]";
+                    $html[] = $arDepartment['NAME'];
+                $html[] = "[/td]";
+            $html[] = "[/tr]";
+            $html[] = "[tr]";
+                $html[] = "[td]";
+                    $html[] = "Статус:";
+                $html[] = "[/td]";
+                $html[] = "[td]";
+                    $html[] = AccessRequestTable::getStatusName($request['STATUS']);
+                $html[] = "[/td]";
+            $html[] = "[/tr]";
+
+            $html[] = "[tr]";
+        $html[] = "[/table]";
+        $html[] = "[b]Запрашиваемые доступы:[/b]";
+        $html[] = "[LIST]";
+        foreach ($accessList["user_value"] as $access_key => $access_item)
+        {
+            if($access_item == "all") {
+                $line = "[*]".$arResult["ACCESS_ELEMENTS"][$access_key]["NAME"].(isset($accessList["user_other"][$access_key]) ? " (".$accessList["user_other"][$access_key].")" : "") . " - предоставить";
+                $html[] = $line;
+            }
+        }
+        $html[] = "[/LIST]";
+        $html[] = "[b]История согласований:[/b]";
+        $html[] = "[LIST]";
+        foreach ($history as $row)
+        {
+            $html[] = sprintf(
+                "[*][%s] Пользователь %s → %s (%s)",
+                $row['CREATED_DATE']->toString(),
+                implode(" ", [
+                    $row['USER_LAST_NAME'], 
+                    $row['USER_NAME'], 
+                    $row['USER_SECOND_NAME']
+                ]),
+                AccessRequestTable::getStatusName($row['STATUS']),
+                $row['COMMENT'] ?? ''
+            );
+        }
+        $html[] = "[/LIST]";
+
+        return implode("\n", $html);
+    }
+
 
     public static function decodeAccess(?string $json): array
     {

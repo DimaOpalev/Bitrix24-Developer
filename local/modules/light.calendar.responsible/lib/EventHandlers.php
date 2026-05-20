@@ -76,12 +76,20 @@ class EventHandlers
                             'REINVITE' => true,
                         ]),
                     ],
-                    'sendInvitations'        => true, // Глобальный флаг отправки приглашений
+                    'sendInvitations'        => false, // Глобальный флаг отправки приглашений
                     'checkLocationOccupancy' => false, // Чтобы не ругалось на занятость той же переговорки
                     'fromWebservice' => true // Помогает избежать лишних проверок прав
 
                 ],
                 );
+                Debug::writeToFile(
+                    [
+                        'arFields' => $arFields,
+                    ],
+                    '[calendar.responsible] Successfully updated event',
+                    '/local/logs/calendar_responsible.log'
+                );
+
             }
         }
     }

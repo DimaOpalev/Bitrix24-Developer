@@ -8,37 +8,47 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Crm\Service\Container;
 use Company\AccessRequest\AccessRequestTable;
+use Bitrix\Main\UI\PageNavigation;
 
 Loc::loadMessages(__FILE__);
 
 class AccessRequestListComponent extends CBitrixComponent
 {
     protected $toolbarId = 'access_request_toolbar';
-    protected $gridId = 'access_request_toolbar';
-    protected $filterId = 'access_request_toolbar';
+    protected $gridId = 'access_request_grid';
+    protected $filterId = 'access_request_grid';
 
-    protected $smartProcessEntityTypeId = 1042;
+    protected $smartProcessEntityTypeId = null;
 
     public function onPrepareComponentParams($arParams)
     {
+        Loader::includeModule('company.accessrequest');
+        $moduleId = COMPANY_ACCESSREQUEST_MODULE_ID;
         $arParams['ADD_BUTTON_URL'] = trim($arParams['ADD_BUTTON_URL'] ?? '/item/');
         $arParams['ITEM_URL'] = trim($arParams['ITEM_URL'] ?? '/item/?ID=#ID#');
+        $this->smartProcessEntityTypeId = (int)\Bitrix\Main\Config\Option::get($moduleId, 'entity_type_id', 0);
 
         return $arParams;
     }
 
     protected function setRows($request, $item): array 
     {
+        // Формируем ссылку на задачу
+        $taskLink = '';
+        if (!empty($request['REF_TASK'])) {
+            $taskLink = '<a href="/company/personal/user/0/tasks/task/view/' . $request['REF_TASK'] . '/">Задача #' . $request['REF_TASK'] . '</a>';
+        }
         return [
             'data' => $request,
             'columns' => [
                 'REQUEST_ID' => $request['ID'],
                 'EMPLOYEE_NAME' => $request['EMPLOYEE_NAME'],
-                'REQUEST_STATUS' => AccessRequestTable::getStatusName($request['STATUS']),
+                'REQUEST_STATUS' => '<span class="badge '.AccessRequestTable::BADGE_STATUS[$request['STATUS']].'">'.AccessRequestTable::getStatusName($request['STATUS']).'</span>',
                 'CREATED_DATE' => $request['CREATED_DATE'] ? $request['CREATED_DATE']->toString() : '',
                 'SMART_STAGE' => $item ? $this->getStageName($item->getStageId()) : null,
                 'SMART_ASSIGNED' => $item ? $this->getUserName($item->get('ASSIGNED_BY_ID')) : null,
                 'SMART_CREATED' => $item ? ($item->get('CREATED_TIME') ? $item->get('CREATED_TIME')->toString() : '') : null,
+                'REF_TASK' => $taskLink,
             ],
             'actions' => $this->getRowActions($request),
         ];
@@ -68,12 +78,20 @@ class AccessRequestListComponent extends CBitrixComponent
         Loader::includeModule('ui');
 
         // 1. Инициализация грида и фильтра
+        // Вместо ручного чтения из $_GET
         $gridOptions = new Options($this->gridId);
-        $navParams = $gridOptions->GetNavParams('page');  // ← явно указываем 'page'
+        $navParams = $gridOptions->GetNavParams();
 
-        // Нормализация параметров пагинации
         $currentPage = max(1, (int)($navParams['iNumPage'] ?? 1));
         $pageSize = max(1, (int)($navParams['nPageSize'] ?? 20));
+
+        $nav = new PageNavigation($this->gridId);
+
+        $nav->allowAllRecords(true)
+            ->setPageSize($pageSize)
+            ->initFromUri();
+
+        $currentPage = $nav->getCurrentPage();
 
         // Получаем сортировку от пользователя
         $userSort = $gridOptions->GetSorting(['sort' => ['ID' => 'DESC']]);
@@ -161,23 +179,41 @@ class AccessRequestListComponent extends CBitrixComponent
 
         // Формируем фильтр для access_request (включая новые заявки со статусом 0)
         $accessFilter = [
-            'LOGIC' => 'OR',
+            'LOGIC' => 'AND',
             [
-                '=ID' => !empty($smartRequestIds) ? $smartRequestIds : 0,
-            ],
-            [
-                '=STATUS' => 0,
-                '=REF_CREATE_USER' => $this->getUserId(),
+                'LOGIC' => 'OR',
+                [
+                    '=ID' => !empty($smartRequestIds) ? $smartRequestIds : 0,
+                ],
+                [
+                    '=STATUS' => 0,
+                    '=REF_CREATE_USER' => $this->getUserId(),
+                ],
             ],
         ];
 
-        // Получаем данные из access_request с пагинацией и сортировкой
+        if (!empty($smartProcessFilter["%TITLE"])) {
+            $accessFilter[] = [
+                '%REQUESTED_ACCESS' => $smartProcessFilter["%TITLE"]
+            ];
+        }
+
+        // Получаем общее количество
+        $totalCount = AccessRequestTable::getList([
+            'select' => ['CNT' => new \Bitrix\Main\Entity\ExpressionField('CNT', 'COUNT(*)')],
+            'filter' => $accessFilter,
+        ])->fetch()['CNT'];
+        $nav->setRecordCount($totalCount);
+
+        \Bitrix\Main\Application::getConnection()->startTracker();
+
+        // Получаем данные с учётом пагинации
         $list = AccessRequestTable::getList([
             'select' => ['*'],
             'filter' => $accessFilter,
             'order' => $accessOrderFinal,
-            'limit' => $pageSize,
-            'offset' => ($currentPage - 1) * $pageSize,
+            'limit' => $nav->getLimit(),
+            'offset' => $nav->getOffset(),
         ]);
 
         // Формируем строки для грида
@@ -187,37 +223,14 @@ class AccessRequestListComponent extends CBitrixComponent
             $rows[] = $this->setRows($row, $smartItem);
         }
 
-        // Пагинация для грида
-        // После получения $rows
-$totalCount = AccessRequestTable::getList([
-    'select' => ['CNT' => new \Bitrix\Main\Entity\ExpressionField('CNT', 'COUNT(*)')],
-    'filter' => $accessFilter,
-])->fetch()['CNT'];
-
-// Пагинация для грида
-$cdbResult = new \CDBResult();
-$cdbResult->InitFromArray($rows);
-$cdbResult->NavNum = 1;
-$cdbResult->NavPageSize = $pageSize;
-$cdbResult->NavRecordCount = $totalCount;
-$cdbResult->NavPageCount = ceil($totalCount / $pageSize);
-$cdbResult->NavStart($pageSize, $currentPage);
-
-
+        $this->arResult['NAV_OBJECT'] = $nav;
         // Передаём в шаблон
         $this->arResult['GRID_ID'] = $this->gridId;
         $this->arResult['FILTER_ID'] = $this->filterId;
         $this->arResult['COLUMNS'] = $this->getColumns();
         $this->arResult['FILTERS'] = $this->getFilters();
         $this->arResult['ROWS'] = $rows;
-        $this->arResult['NAV_OBJECT'] = $cdbResult;
-// $this->arResult['NAV_OBJECT'] = [
-//     'NavRecordCount' => $cdbResult->NavRecordCount,
-//     'NavPageCount' => $cdbResult->NavPageCount,
-//     'NavPageSize' => $cdbResult->NavPageSize,
-//     'NavNum' => $cdbResult->NavNum,
-//     'iNumPage' => $currentPage,
-// ];
+
 
         $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
         $this->arResult['SORT'] = $sort;
@@ -226,19 +239,6 @@ $cdbResult->NavStart($pageSize, $currentPage);
         $this->arResult['ADD_BUTTON_URL'] = $this->arParams['ADD_BUTTON_URL'];
         $this->arResult['ADD_REQUEST_BUTTON_TEXT'] = Loc::getMessage('ADD_REQUEST_BUTTON');
         $this->arResult['ITEM_URL'] = $this->arParams['ITEM_URL'];
-
-        var_dump([
-            'totalCount' => $totalCount,
-            'NavRecordCount' => $cdbResult->NavRecordCount,
-            'NavPageCount' => $cdbResult->NavPageCount,
-            'NavPageSize' => $cdbResult->NavPageSize,
-            'NavNum' => $cdbResult->NavNum,
-            'iNumPage' => $currentPage,
-        ]);
-        echo "<!-- NAV_OBJECT: " . get_class($this->arResult['NAV_OBJECT']) . " -->";
-        echo "<!-- NavRecordCount: " . $this->arResult['NAV_OBJECT']->NavRecordCount . " -->";
-        echo "<!-- NavPageCount: " . $this->arResult['NAV_OBJECT']->NavPageCount . " -->";
-        echo "<!-- pageSize: " . $this->arResult['NAV_OBJECT']->NavPageSize . " -->";
 
         $this->includeComponentTemplate();
     }
@@ -256,6 +256,8 @@ $cdbResult->NavStart($pageSize, $currentPage);
             ['id' => 'CREATED_DATE', 'name' => Loc::getMessage('COLUMN_CREATED_DATE'), 'sort' => 'CREATED_DATE', 'default' => true],
             ['id' => 'SMART_ASSIGNED', 'name' => 'Ответственный в СП', 'sort' => 'ASSIGNED_BY_ID', 'default' => false],
             ['id' => 'SMART_CREATED', 'name' => 'Дата создания в СП', 'sort' => 'CREATED_TIME', 'default' => false],
+            ['id' => 'REF_TASK', 'name' => Loc::getMessage('COLUMN_TASK'), 'default' => true],
+
         ];
     }
 

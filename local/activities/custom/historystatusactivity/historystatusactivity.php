@@ -23,9 +23,11 @@ class CBPHistoryStatusActivity extends BaseActivity
             'UserDecisionMaker' => null,
             'Comment' => null,
             'Status' => null,
+            'RefTask' => null,
 
             // выход
             'ResultText' => null,
+            'ResultHTML' => null,
             'ErrorText' => null,
             'RefDepartment' => null,
             'DepartmenManager' => null,
@@ -34,11 +36,13 @@ class CBPHistoryStatusActivity extends BaseActivity
         $this->SetPropertiesTypes([
             'RequestId' => ['Type' => FieldType::INT],
             'Status' => ['Type' => FieldType::INT],
+            'RefTask' => ['Type' => FieldType::INT],
             'UserDecisionMaker' => ['Type' => FieldType::USER],
             'Comment' => ['Type' => FieldType::STRING],
             'RefDepartment' => ['Type' => FieldType::INT],
             'DepartmenManager' => ['Type' => FieldType::USER],
             'ResultText' => ['Type' => FieldType::STRING],
+            'ResultHTML' => ['Type' => FieldType::STRING],
             'ErrorText' => ['Type' => FieldType::STRING],
         ]);
     }
@@ -93,6 +97,13 @@ class CBPHistoryStatusActivity extends BaseActivity
                 'Required' => true,
                 'Description' => 'Статус заявления из выбранного списка',
             ],
+            'RefTask' => [
+                'Name' => 'Ссылка на задачу',
+                'FieldName' => 'RefTask',
+                'Type' => FieldType::INT,
+                'Required' => false,
+                'Description' => 'Ссылка на задачу',
+            ],
         ];
     }
 
@@ -112,6 +123,7 @@ class CBPHistoryStatusActivity extends BaseActivity
             $requestId = (int)$this->parseValue($this->RequestId, FieldType::INT);
             $status = (int)$this->parseValue($this->Status, FieldType::INT);
             $comment = $this->parseValue($this->Comment, FieldType::STRING);
+            $refTask = (int)$this->parseValue($this->RefTask, FieldType::INT);
 
             $this->log("requestId={$requestId}, status={$status}");
 
@@ -167,6 +179,7 @@ class CBPHistoryStatusActivity extends BaseActivity
             $result = AccessRequestTable::update($requestId, [
                 'STATUS' => $status,
                 'UPDATED_DATE' => new DateTime(),
+                'REF_TASK' => $refTask,
             ]);
 
             if (!$result->isSuccess()) {
@@ -176,7 +189,10 @@ class CBPHistoryStatusActivity extends BaseActivity
             }
 
             $resultText = AccessRequestTable::generateText($requestId);
+            // $resultHTML = "";
+            $resultHTML = AccessRequestTable::generateHTML($requestId);
             $this->preparedProperties['ResultText'] = $resultText;
+            $this->preparedProperties['ResultHTML'] = $resultHTML;
 
             $path = $_SERVER['DOCUMENT_ROOT'] . '/local/logs/bp_list_dopusk.log';
             file_put_contents($path, print_r([
@@ -187,6 +203,7 @@ class CBPHistoryStatusActivity extends BaseActivity
                 "departmentId" => $departmentId,
                 "managerId" => $managerId,
                 "ResultText" => $resultText,
+                "ResultHTML" => $resultHTML,
             ], true), FILE_APPEND);
 
         }

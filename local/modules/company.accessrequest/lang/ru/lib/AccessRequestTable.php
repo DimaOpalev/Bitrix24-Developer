@@ -1,6 +1,6 @@
 <?php
 
-$MESS['ACCESS_STATUS_NEW'] = 'Новый';
+$MESS['ACCESS_STATUS_NEW'] = 'Черновик';
 $MESS['ACCESS_STATUS_REVIEW'] = 'На рассмотрении';
 $MESS['ACCESS_STATUS_APPROVED'] = 'Согласовано';
 $MESS['ACCESS_STATUS_CANCELLED'] = 'Аннулирован';

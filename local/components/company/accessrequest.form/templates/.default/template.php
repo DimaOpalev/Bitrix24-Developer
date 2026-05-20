@@ -104,11 +104,12 @@ if (!empty($arResult['ERRORS'])) {
                     }
                     ?>
                 </table>
-                
+
                 <?php if (!$arResult['READONLY']): ?>
                     <button class="ui-btn ui-btn-primary" name="matchingButton"><?= Loc::getMessage('SAVE_BUTTON') ?></button>
                     <button class="ui-btn ui-btn-success" name="SendMatching"><?= Loc::getMessage('SEND_BUTTON') ?></button>
                 <?php endif; ?>
+
                 <a class="ui-btn ui-btn-sm" href="<?= $arResult['BACK_URL'] ?>"><?= Loc::getMessage('BACK_BUTTON') ?></a>
             </form>
         </div>

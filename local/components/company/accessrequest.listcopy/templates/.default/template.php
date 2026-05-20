@@ -10,6 +10,9 @@ use Bitrix\UI\Toolbar\Facade\Toolbar;
 Loc::loadMessages(__FILE__);
 Extension::load(['ui.buttons', 'ui.forms', 'ui.alerts', 'ui.grid']);
 
+Extension::load(['ui.buttons', 'ui.forms', 'ui.alerts', 'ui.grid']);
+Asset::getInstance()->addCss('//cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+
 // Добавляем кнопки в тулбар
 if (isset($arResult['TOOLBAR']['BUTTONS'])) {
     foreach ($arResult['TOOLBAR']['BUTTONS'] as $buttonParams) {
@@ -23,11 +26,19 @@ if (isset($arResult['TOOLBAR']['FILTER'])) {
     Toolbar::addFilter($arResult['TOOLBAR']['FILTER']);
 }
 
-// Подключаем грид, уже без отдельной кнопки
+// Подключаем грид
 $APPLICATION->IncludeComponent(
     'bitrix:main.ui.grid',
     '',
     [
+        'AJAX_MODE' => 'Y',
+        'AJAX_OPTION_JUMP' => 'N',
+        'AJAX_OPTION_HISTORY' => 'N',
+        'AJAX_ID' => \CAjax::getComponentID(
+            'bitrix:main.ui.grid',
+            '',
+            ''
+        ),
         'GRID_ID' => $arResult['GRID_ID'],
         'COLUMNS' => $arResult['COLUMNS'],
         'ROWS' => $arResult['ROWS'],
@@ -35,25 +46,23 @@ $APPLICATION->IncludeComponent(
         'TOTAL_ROWS_COUNT' => $arResult['TOTAL_ROWS_COUNT'],
         'SHOW_PAGESIZE' => true,
         'SHOW_NAVIGATION_PANEL' => true,
-        'NAV_PARAM_NAME' => 'page',
-        'PAGE_SIZES' => [                  // Доступные варианты (опционально)
-            ['NAME' => '5', 'VALUE' => '5'],
-            ['NAME' => '10', 'VALUE' => '10'],
-            ['NAME' => '20', 'VALUE' => '20'],
-            ['NAME' => '50', 'VALUE' => '50'],
-            ['NAME' => '100', 'VALUE' => '100'],
-        ],
-        'DEFAULT_PAGE_SIZE' => 50,
         'SHOW_ROW_CHECKBOXES' => false,
         'SHOW_CHECK_ALL_CHECKBOXES' => false,
         'SHOW_SELECTED_COUNTER' => false,
         'SHOW_ACTION_PANEL' => false,
         'FILTER' => $arResult['FILTERS'],
         'FILTER_ID' => $arResult['FILTER_ID'],
-        'SHOW_NAVIGATION_PANEL' => true,
-        'ENABLE_COLLAPSIBLE_ROWS' => false,
         'SORT' => $arResult['SORT'],
         'SORT_VARS' => $arResult['SORT_VARS'],
+        'PAGE_SIZES' => [
+            ['NAME' => '5', 'VALUE' => '5'],
+            ['NAME' => '10', 'VALUE' => '10'],
+            ['NAME' => '20', 'VALUE' => '20'],
+            ['NAME' => '50', 'VALUE' => '50'],
+        ],
+        'DEFAULT_PAGE_SIZE' => 20,
     ]
 );
+
+
 ?>

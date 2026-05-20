@@ -21,6 +21,10 @@ $arActivityDescription = [
             "NAME" => "Текст листа допуска",
             "TYPE" => "string",
         ],
+        "ResultHTML" => [
+            "NAME" => "HTML листа допуска",
+            "TYPE" => "string",
+        ],
         "RefDepartment" => [
             "NAME" => "Подразделение, в котором работает сотрудник",
             "TYPE" => "int",
