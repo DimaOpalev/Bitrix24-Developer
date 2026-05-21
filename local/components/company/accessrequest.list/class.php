@@ -123,22 +123,27 @@ class AccessRequestListComponent extends CBitrixComponent
         $filterOption = new FilterOptions($this->filterId);
         $filterData = $filterOption->getFilter($this->getFilters());
 
-        // Подготавливаем данные для тулбара
-        $this->arResult['TOOLBAR'] = [
-            'BUTTONS' => [
-                [
-                    'text' => Loc::getMessage('ADD_REQUEST_BUTTON'),
-                    'link' => $this->arParams['ADD_BUTTON_URL'],
-                    'color' => \Bitrix\UI\Buttons\Color::PRIMARY,
+        $this->arResult['HIDE_FILTER'] = $this->arParams['HIDE_FILTER'] === 'Y';
+        $this->arResult['HIDE_TOOLBAR'] = $this->arParams['HIDE_TOOLBAR'] === 'Y';
+
+        if (!$this->arResult['HIDE_TOOLBAR']) {
+            // Подготавливаем данные для тулбара
+            $this->arResult['TOOLBAR'] = [
+                'BUTTONS' => [
+                    [
+                        'text' => Loc::getMessage('ADD_REQUEST_BUTTON'),
+                        'link' => $this->arParams['ADD_BUTTON_URL'],
+                        'color' => \Bitrix\UI\Buttons\Color::PRIMARY,
+                    ],
                 ],
-            ],
-            'FILTER' => [
-                'GRID_ID' => $this->gridId,
-                'FILTER_ID' => $this->filterId,
-                'FILTER' => $this->getFilters(),
-                'ENABLE_LIVE_SEARCH' => true,
-            ],
-        ];
+                'FILTER' => [
+                    'GRID_ID' => $this->gridId,
+                    'FILTER_ID' => $this->filterId,
+                    'FILTER' => $this->getFilters(),
+                    'ENABLE_LIVE_SEARCH' => true,
+                ],
+            ];
+        }
 
         // Подготавливаем фильтры
         $smartProcessFilter = $this->prepareSmartProcessFilter($filterData);
@@ -196,6 +201,21 @@ class AccessRequestListComponent extends CBitrixComponent
             $accessFilter[] = [
                 '%REQUESTED_ACCESS' => $smartProcessFilter["%TITLE"]
             ];
+        }
+
+        // Если передан принудительный фильтр (например, из вкладки контакта)
+        if (!empty($this->arParams['FORCE_FILTER']) && is_array($this->arParams['FORCE_FILTER'])) {
+            $forceFilter = $this->arParams['FORCE_FILTER'];
+            // Применяем его к основному фильтру
+            if (empty($accessFilter)) {
+                $accessFilter = $forceFilter;
+            } else {
+                $accessFilter = [
+                    'LOGIC' => 'AND',
+                    $accessFilter,
+                    $forceFilter,
+                ];
+            }
         }
 
         // Получаем общее количество

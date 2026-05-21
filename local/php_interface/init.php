@@ -4,7 +4,7 @@ use Bitrix\Main\Engine\CurrentUser;
 use Bitrix\Main\EventManager;
 use \Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
-
+use Bitrix\Main\EventResult;
 
 if(file_exists(__DIR__ . '/../../vendor/autoload.php')) {
     require_once(__DIR__ . '/../../vendor/autoload.php');
@@ -117,6 +117,67 @@ AddEventHandler('main', 'OnEpilog', function() {
         ['HIDE_ICONS' => 'Y']
     );
 });
+
+/*
+// ===== ДОБАВЛЯЕМ ВКЛАДКУ В КАРТОЧКУ КОНТАКТА =====
+$eventManager->addEventHandler('crm', 'OnEntityDetailsTabsInitialized', function (\Bitrix\Main\Event $event) {
+    $params = $event->getParameters();
+    $entityTypeID = (int) $params['entityTypeID'];
+    $entityID = (int) $params['entityID'];
+    
+    // Только для контактов
+    if ($entityTypeID !== CCrmOwnerType::Contact) {
+        return new EventResult(EventResult::SUCCESS, [], 'crm');
+    }
+
+    // // Временная отладка
+    // file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/debug_tab.log', 
+    //     date('Y-m-d H:i:s') . ' - Tab show called: ' . print_r($params, true) . "\n", 
+    //     FILE_APPEND
+    // );
+
+    // $requestIds = getAccessRequestIdsByContact($entityID);
+
+    // if (empty($requestIds)) {
+    //     $html = '<div style="padding:20px;">Нет заявок на доступ для данного контакта</div>';
+    // } else {
+    //     ob_start();
+    //     global $APPLICATION;
+    //     $APPLICATION->IncludeComponent(
+    //         'company:accessrequest.list',
+    //         '.default',
+    //         [
+    //             'FORCE_FILTER' => ['=ID' => $requestIds],
+    //             'HIDE_FILTER' => 'Y',
+    //             'HIDE_TOOLBAR' => 'Y',
+    //         ]
+    //     );
+    //     $html = ob_get_clean();
+    // }
+
+    $tabs = $params['tabs'];
+    
+    // Добавляем нашу вкладку
+        $tabs[] = [
+            'id' => 'tab_access_requests',
+            'name' => 'Заявки на доступ',
+            'loader' => [
+                'serviceUrl' => '/local/ajax/access_requests_tab.php',
+                'componentData' => [
+                    'template' => '',
+                    'params' => [
+                        'CONTACT_ID' => (int)$params['entityID']
+                    ]
+                ]
+            ]
+        ];
+    
+    // Возвращаем обновлённые вкладки
+    return new EventResult(EventResult::SUCCESS, ['tabs' => $tabs], 'crm');
+});
+*/
+
+
 
 
 // Подписка на событие для добавления вкладки в карточку смарт-процесса

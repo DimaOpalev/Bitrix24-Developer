@@ -5,7 +5,7 @@ $APPLICATION->SetTitle("Лист допуска");
 
 
 $APPLICATION->IncludeComponent(
-    'company:accessrequest.listcopy',
+    'company:accessrequest.list',
     '.default',
     [
         'ADD_BUTTON_URL' => '/dlya-sotrudnikov/list-dopuska/item/',
