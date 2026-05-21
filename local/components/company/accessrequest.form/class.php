@@ -3,6 +3,7 @@
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Loader;
+use Bitrix\Crm\ContactTable;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Type\DateTime;
 use Company\AccessRequest\AccessRequestTable;
@@ -10,6 +11,7 @@ use Company\AccessRequest\AccessRequestHistoryTable;
 use Bitrix\Main\Grid\Options;
 use Bitrix\Main\UI\Filter\Options as FilterOptions;
 use Bitrix\Main\Context;
+use Bitrix\Main\SystemException;
 
 class AccessRequestFormComponent extends CBitrixComponent
 {
@@ -44,9 +46,13 @@ class AccessRequestFormComponent extends CBitrixComponent
         $this->arResult['IS_ADMIN'] = $USER->IsAdmin();
 
         $this->arResult['ID'] = $this->arParams['ID'];
+
         // Если редактируем существующую заявку
         if ($this->arParams['ID'] > 0) {
-            $this->loadRequestData($this->arParams['ID']);
+            $is_load_request = $this->loadRequestData($this->arParams['ID']);
+            if(!$is_load_request) {
+                return;
+            }
             $this->arResult['READONLY'] = $this->isReadOnly();
         } else {
             $this->arResult['READONLY'] = false;
@@ -72,9 +78,6 @@ class AccessRequestFormComponent extends CBitrixComponent
          * Подготовка грида gridAccessRequestHistrory
          */
         $this->gridAccessRequestHistrory();
-
-
-
 
         $this->includeComponentTemplate();
     }
@@ -185,30 +188,32 @@ class AccessRequestFormComponent extends CBitrixComponent
         $this->arResult['TOTAL_ROWS_COUNT'] = $totalCount;
     }
 
+    /**
+     * Загрузка данных для запроса
+     */
     protected function loadRequestData($id)
     {
         global $USER;
+        $accessCheck = AccessRequestTable::checkAccessRightElementByID($id);
 
         $request = AccessRequestTable::getById($id)->fetch();
 
         if($request['REF_CREATE_USER'] != $USER->GetID() && $request['STATUS'] === AccessRequestTable::STATUS_NEW) {
-            LocalRedirect($this->arParams['BACK_URL']);
+            ShowError('Недостаточно прав для просмотра элемента');
+            return false;
+            // LocalRedirect($this->arParams['BACK_URL']);
         }
 
-        if (AccessRequestTable::accessRightElementByID($id) === false) {
-            ShowError('Смарт-процесс не найден');
-            LocalRedirect($this->arParams['BACK_URL']);
+        if (!$accessCheck['ACCESS'] && $request['STATUS'] != AccessRequestTable::STATUS_NEW) {
+            ShowError('Недостаточно прав для просмотра элемента');
+            return false;
+            // LocalRedirect($this->arParams['BACK_URL']);
         }
 
-         // Получаем данные смарт-процесса для отображения текущего этапа и ответственного
-         $item = null;
-         if ($request['REF_SMART_PROCESS_ID']) {
-             $factory = \Bitrix\Crm\Service\Container::getInstance()->getFactoryByEntityTypeId(COMPANY_ACCESSREQUEST_MODULE_ID);
-             $item = $factory->getItem($request['REF_SMART_PROCESS_ID']);
-
-        }
         if (!$request) {
-            LocalRedirect($this->arParams['BACK_URL']);
+            ShowError('Заявка не найдена');
+            return false;
+            // LocalRedirect($this->arParams['BACK_URL']);
         }
 
         // Декодируем список доступов
@@ -217,6 +222,7 @@ class AccessRequestFormComponent extends CBitrixComponent
         // Устанавливаем значения в $_POST-подобный массив для шаблона
         $this->arResult['REQUEST'] = $request;
         $this->arResult['POST_DATA'] = $request['REQUESTED_ACCESS_DECODED'];
+        return true;
     }
 
     protected function isReadOnly()
@@ -318,7 +324,9 @@ class AccessRequestFormComponent extends CBitrixComponent
         return $el && $el['CODE'] === 'other';
     }
 
-
+    /**
+     * Запуск процесса утверждения
+     */
     protected function startApprovalProcess(int $requestId, array $post)
     {
         global $USER;
@@ -330,7 +338,7 @@ class AccessRequestFormComponent extends CBitrixComponent
             //'Не указан ID смарт-процесса. Обратитесь к администратору.';
             return;
         }
-        
+
         // Получаем имя поля для хранения ID заявки
         $requestIdFieldName = \Bitrix\Main\Config\Option::get($moduleId, 'request_id_field_name', '');
         if (empty($requestIdFieldName)) {
@@ -346,6 +354,8 @@ class AccessRequestFormComponent extends CBitrixComponent
             return;
         }
 
+        $contactId = $this->findAndCreatedContact($post);
+
         // Получаем фабрику для смарт-процесса
         $factory = \Bitrix\Crm\Service\Container::getInstance()->getFactory($smartProcessEntityTypeId);
         if (!$factory) {
@@ -360,9 +370,13 @@ class AccessRequestFormComponent extends CBitrixComponent
 
         $observerIds = [$USER->GetID()];
         $item->setObservers($observerIds);
-        
+
         // Устанавливаем связь с заявкой
         $item->set($requestIdFieldName, $requestId);
+
+        if ($contactId) {
+            $item->set('CONTACT_ID', $contactId);  // Добавляем контакт в смарт-процесс
+        }
 
         $operation = $factory->getAddOperation($item);
         $result = $operation->launch();
@@ -380,29 +394,99 @@ class AccessRequestFormComponent extends CBitrixComponent
             'STATUS' => AccessRequestTable::STATUS_REVIEW, // 10 - На рассмотрении
         ]);
 
-        // Добавляем запись в историю
-        // AccessRequestHistoryTable::add([
-        //     'REF_REQUEST' => $requestId,
-        //     'USER_DECISION_MAKER' => $GLOBALS['USER']->GetID(),
-        //     'STATUS' => AccessRequestTable::STATUS_REVIEW,
-        //     'COMMENT' => Loc::getMessage('REQUEST_SENT'),
-        // ]);
-        
-        return $smartProcessId;
-        // Здесь логика запуска бизнес-процесса или создания задачи
-        // Например, создаём запись в истории
-        /*
-        AccessRequestHistoryTable::add([
-            'REF_REQUEST' => $requestId,
-            'USER_DECISION_MAKER' => $GLOBALS['USER']->GetID(),
-            'STATUS' => AccessRequestTable::STATUS_REVIEW,
-            'COMMENT' => 'Отправлено на согласование: ' . ($post['COMMENT'] ?? ''),
-        ]);
+        $this->addTimelineComment($smartProcessEntityTypeId, $smartProcessId, AccessRequestTable::generateHTML($requestId));
 
-        // Обновляем статус заявки
-        AccessRequestTable::update($requestId, ['STATUS' => AccessRequestTable::STATUS_REVIEW]);
-        */
-        // TODO: здесь можно запустить реальный бизнес-процесс или поставить задачу руководителю
-        // Например, через CTaskItem::add, или через запуск БП методом CBPDocument::StartWorkflow
+        return $smartProcessId;
+
+    }
+
+    /**
+     * Создание/поиск контакта
+     */
+    private function findAndCreatedContact(array $post): ?int {
+        // --- Создание/поиск контакта ---
+        $fio = trim($post["POST_DATA"]['FIO'] ?? '');
+        $phone = trim($post["POST_DATA"]['employeePhoneNumber'] ?? '');
+        $contactId = null;
+
+        $nameParts = array_pad(explode(' ', $fio, 3), 3, '');
+
+        if (!empty($fio)) {
+            // Поиск по телефону
+            if (!empty($phone)) {
+                $existing = \CCrmContact::GetListEx(
+                    [],
+                    ['PHONE' => $phone],
+                    false,
+                    false,
+                    ['ID']
+                )->Fetch();
+                if ($existing) $contactId = (int)$existing['ID'];
+            }
+            // Поиск по ФИО (если не найден)
+            if (!$contactId) {
+                $searchFilter = ['LOGIC' => 'AND'];
+
+                foreach ($nameParts as $part) {
+
+                    $part = trim($part);
+
+                    if (!$part) {
+                        continue;
+                    }
+
+                    $searchFilter[] = [
+                        '%SEARCH_CONTENT' => mb_strtoupper($part)
+                    ];
+                }
+
+                if(!empty($searchFilter))  {
+					$existing = ContactTable::getList([
+						'select' => ['ID'],
+						'filter' => $searchFilter,
+						'limit' => 1
+					])->fetch();
+                }
+
+                if ($existing) $contactId = (int)$existing['ID'];
+            }
+            // Создание нового контакта
+            if (!$contactId) {
+                // $nameParts = array_pad(explode(' ', $fio, 3), 3, '');
+                $contactFields = [
+                    'NAME' => $nameParts[1],
+                    'LAST_NAME' => $nameParts[0],
+                    'SECOND_NAME' => $nameParts[2],
+                    'PHONE' => $phone ? [['VALUE' => $phone, 'VALUE_TYPE' => 'WORK']] : [],
+                ];
+                $contact = new \CCrmContact(false);
+                $contactId = $contact->Add($contactFields);
+                if (!$contactId) {
+                    $this->arResult['ERRORS']['contact'] = 'Не удалось создать контакт';
+                }
+            }
+        }
+        return $contactId;
+    }
+
+    protected function addTimelineComment($smartProcessEntityTypeId, $smartProcessItemId, $commentText)
+    {
+        if (!Loader::includeModule('crm')) {
+            return;
+        }
+
+        $commentData = [
+            'TEXT' => $commentText, // Текст комментария
+            'AUTHOR_ID' => AccessRequestTable::getUserId(), // ID текущего пользователя
+            'BINDINGS' => [
+                [
+                    'ENTITY_TYPE_ID' => $smartProcessEntityTypeId, // Прямое указание типа для смарт-процессов
+                    'ENTITY_ID' => $smartProcessItemId,
+                ]
+            ],
+            // 'FILES' => [] // При необходимости добавьте файлы
+        ];
+
+        $entryId = \Bitrix\Crm\Timeline\CommentEntry::create($commentData);
     }
 }

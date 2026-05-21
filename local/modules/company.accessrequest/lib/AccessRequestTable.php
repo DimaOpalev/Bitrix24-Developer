@@ -38,32 +38,56 @@ class AccessRequestTable extends DataManager
         return $USER->GetID();
     }
 
-
-    public static function accessRightElementByID($ID = 0)
+    public static function checkAccessRightElementByID($ID = 0): array
     {
         Loader::includeModule('company.accessrequest');
+
         $moduleId = COMPANY_ACCESSREQUEST_MODULE_ID;
 
-        $smartProcessEntityTypeId = (int)\Bitrix\Main\Config\Option::get($moduleId, 'entity_type_id', 0);
+        $smartProcessEntityTypeId = (int)\Bitrix\Main\Config\Option::get(
+            $moduleId,
+            'entity_type_id',
+            0
+        );
+
         $factory = Container::getInstance()->getFactory($smartProcessEntityTypeId);
 
         if (!$factory) {
-            ShowError('Смарт-процесс не найден');
-            return;
+            return [
+                'EXISTS' => false,
+                'ACCESS' => false,
+            ];
         }
 
-        $smartProcessFilter = ['UF_CRM_4_REQUEST_ID' =>(int)$ID];
-        
-        global $USER;
-        $userId = $USER->GetID();
+        $filter = [
+            'UF_CRM_4_REQUEST_ID' => (int)$ID
+        ];
 
-        $smartItemsResult = $factory->getItemsFilteredByPermissions([
-            'select' => ['ID', 'TITLE', 'UF_CRM_4_REQUEST_ID', 'STAGE_ID', 'ASSIGNED_BY_ID', 'CREATED_TIME'],
-            'filter' => $smartProcessFilter,
+        // Проверка существования без прав
+        $allItems = $factory->getItems([
+            'select' => ['ID'],
+            'filter' => $filter,
+            'limit' => 1,
+        ]);
+
+        if (empty($allItems)) {
+            return [
+                'EXISTS' => false,
+                'ACCESS' => false,
+            ];
+        }
+
+        // Проверка прав
+        $accessibleItems = $factory->getItemsFilteredByPermissions([
+            'select' => ['ID'],
+            'filter' => $filter,
+            'limit' => 1,
         ], self::getUserId());
 
-        return !empty($smartItemsResult);
-
+        return [
+            'EXISTS' => true,
+            'ACCESS' => !empty($accessibleItems),
+        ];
     }
 
     public static function getTableName()

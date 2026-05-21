@@ -39,15 +39,16 @@ class company_accessrequest extends CModule
         }
         ModuleManager::registerModule($this->MODULE_ID);
         $this->InstallDB();
-        $this->InstallFiles();
+        // $this->InstallFiles();
         return true;
     }
 
     public function DoUninstall()
     {
         $this->UninstallDB();
-        $this->UninstallFiles();
+        // $this->UninstallFiles();
         ModuleManager::unregisterModule($this->MODULE_ID);
+        // \Bitrix\Main\Application::getInstance()->getTaggedCache()->clearByTag('event-manager');
         return true;
     }
 
@@ -93,9 +94,9 @@ class company_accessrequest extends CModule
 
     public function UninstallDB()
     {
-        $connection = Application::getConnection();
-        $connection->query("DROP TABLE IF EXISTS access_request_history");
-        $connection->query("DROP TABLE IF EXISTS access_request");
+        // $connection = Application::getConnection();
+        // $connection->query("DROP TABLE IF EXISTS access_request_history");
+        // $connection->query("DROP TABLE IF EXISTS access_request");
     }
 
     public function InstallFiles()
